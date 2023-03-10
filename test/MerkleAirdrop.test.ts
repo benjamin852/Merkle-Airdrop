@@ -1,0 +1,81 @@
+import { ethers } from "hardhat";
+import { expect } from "chai";
+import { MerkleDistributor } from "../typechain";
+import { BigNumber, BigNumberish, constants } from "ethers";
+import { keccak256, defaultAbiCoder } from "ethers/lib/utils";
+import { MerkleTree } from "../utils/merkleTree";
+
+const overrides = {
+  gasLimit: 9999999,
+};
+
+const merkleRoot =
+  "0x992a599fd84f199d7a3ca10559ebcc9d638fd74a200c28a5fc5fcafc8798d8a1";
+
+let merkleDistributor: MerkleDistributor;
+let token: any;
+let accounts: any[];
+
+beforeEach(async () => {
+  const [owner, addr1, addr2] = await ethers.getSigners();
+  accounts = [owner, addr1, addr2];
+
+  const Token = await ethers.getContractFactory("Token");
+  token = await Token.deploy();
+  await token.deployed();
+
+  merkleDistributor = await (
+    await ethers.getContractFactory("MerkleDistributor")
+  ).deploy(token.address, merkleRoot);
+  await merkleDistributor.deployed();
+});
+
+describe("MerkleDistributor", function () {
+  it("should fail if the merkle proof is invalid", async function () {
+    const recipient = accounts[0].address;
+    const index = 0;
+    const amount = BigNumber.from("100");
+
+    const leaf = keccak256(
+      defaultAbiCoder.encode(["uint256", "address", "uint256"], [index, recipient, amount])
+    );
+    const invalidProof = new MerkleTree([leaf], 1).getHexProof(leaf);
+
+    await expect(
+      merkleDistributor.claim(index, recipient, amount, invalidProof)
+    ).to.be.revertedWith("Invalid proof");
+  });
+
+  it("should fail if the index has already been claimed", async function () {
+    const recipient = accounts[0].address;
+    const index = 0;
+    const amount = BigNumber.from("100");
+
+    const leaf = keccak256(
+      defaultAbiCoder.encode(["uint256", "address", "uint256"], [index, recipient, amount])
+    );
+    const proof = new MerkleTree([leaf], 1).getHexProof(leaf);
+
+    await merkleDistributor.claim(index, recipient, amount, proof);
+
+    await expect(
+      merkleDistributor.claim(index, recipient, amount, proof)
+    ).to.be.revertedWith("MerkleDistributor: Drop already claimed");
+  });
+
+  it("should distribute tokens correctly", async function () {
+    const recipient = accounts[0].address;
+    const index = 0;
+    const amount = BigNumber.from("100");
+
+    const leaf = keccak256(
+      defaultAbiCoder.encode(["uint256", "address", "uint256"], [index, recipient, amount])
+    );
+    const proof = new MerkleTree([leaf], 1).getHexProof(leaf);
+
+    await merkleDistributor.claim(index, recipient, amount, proof);
+
+    const balance = await token.balanceOf(recipient);
+    expect(balance).to.eq(amount);
+  });
+});

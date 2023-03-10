@@ -51,7 +51,7 @@ library BitMaps {
 error AlreadyClaimed();
 error InvalidProof();
 
-contract MerkleDistributor is IMerkleDistributor {
+contract MerkleDistributor {
     using SafeERC20 for IERC20;
     using BitMaps for BitMaps.BitMap;
 

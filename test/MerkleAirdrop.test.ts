@@ -1,9 +1,9 @@
 import { ethers } from "hardhat";
 import { expect } from "chai";
-import { MerkleDistributor } from "../typechain";
+// import { MerkleTree } from "merkletreejs";
 import { BigNumber, BigNumberish, constants } from "ethers";
 import { keccak256, defaultAbiCoder } from "ethers/lib/utils";
-import { MerkleTree } from "../utils/merkleTree";
+import { MerkleTree } from "merkletreejs";
 
 const overrides = {
   gasLimit: 9999999,
@@ -12,7 +12,7 @@ const overrides = {
 const merkleRoot =
   "0x992a599fd84f199d7a3ca10559ebcc9d638fd74a200c28a5fc5fcafc8798d8a1";
 
-let merkleDistributor: MerkleDistributor;
+let merkleAirdrop: MerkleAirdrop;
 let token: any;
 let accounts: any[];
 
@@ -24,13 +24,13 @@ beforeEach(async () => {
   token = await Token.deploy();
   await token.deployed();
 
-  merkleDistributor = await (
-    await ethers.getContractFactory("MerkleDistributor")
+  merkleAirdrop = await (
+    await ethers.getContractFactory("MerkleAirdrop")
   ).deploy(token.address, merkleRoot);
-  await merkleDistributor.deployed();
+  await merkleAirdrop.deployed();
 });
 
-describe("MerkleDistributor", function () {
+describe("MerkleAirdrop", function () {
   it("should fail if the merkle proof is invalid", async function () {
     const recipient = accounts[0].address;
     const index = 0;
@@ -42,7 +42,7 @@ describe("MerkleDistributor", function () {
     const invalidProof = new MerkleTree([leaf], 1).getHexProof(leaf);
 
     await expect(
-      merkleDistributor.claim(index, recipient, amount, invalidProof)
+      merkleAirdrop.claim(index, recipient, amount, invalidProof)
     ).to.be.revertedWith("Invalid proof");
   });
 
@@ -56,11 +56,11 @@ describe("MerkleDistributor", function () {
     );
     const proof = new MerkleTree([leaf], 1).getHexProof(leaf);
 
-    await merkleDistributor.claim(index, recipient, amount, proof);
+    await merkleAirdrop.claim(index, recipient, amount, proof);
 
     await expect(
-      merkleDistributor.claim(index, recipient, amount, proof)
-    ).to.be.revertedWith("MerkleDistributor: Drop already claimed");
+      merkleAirdrop.claim(index, recipient, amount, proof)
+    ).to.be.revertedWith("MerkleAirdrop: Drop already claimed");
   });
 
   it("should distribute tokens correctly", async function () {
@@ -73,7 +73,7 @@ describe("MerkleDistributor", function () {
     );
     const proof = new MerkleTree([leaf], 1).getHexProof(leaf);
 
-    await merkleDistributor.claim(index, recipient, amount, proof);
+    await merkleAirdrop.claim(index, recipient, amount, proof);
 
     const balance = await token.balanceOf(recipient);
     expect(balance).to.eq(amount);

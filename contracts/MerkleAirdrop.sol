@@ -1,53 +1,10 @@
-/**
- * @dev Library for managing uint256 to bool mapping in a compact and efficient way, providing the keys are sequential.
- * Largely inspired by Uniswap's https://github.com/Uniswap/merkle-distributor/blob/master/contracts/MerkleDistributor.sol[merkle-distributor].
- */
-library BitMaps {
-    struct BitMap {
-        mapping(uint256 => uint256) _data;
-    }
+// SPDX-License-Identifier: GPL-3.0-or-later
+pragma solidity ^0.8.18;
 
-    /**
-     * @dev Returns whether the bit at `index` is set.
-     */
-    function get(
-        BitMap storage bitmap,
-        uint256 index
-    ) internal view returns (bool) {
-        uint256 bucket = index >> 8;
-        uint256 mask = 1 << (index & 0xff);
-        return bitmap._data[bucket] & mask != 0;
-    }
+import {IERC20, SafeERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
+import "@openzeppelin/contracts/utils/structs/BitMaps.sol";
+import "@openzeppelin/contracts/utils/cryptography/MerkleProof.sol";
 
-    /**
-     * @dev Sets the bit at `index` to the boolean `value`.
-     */
-    function setTo(BitMap storage bitmap, uint256 index, bool value) internal {
-        if (value) {
-            set(bitmap, index);
-        } else {
-            unset(bitmap, index);
-        }
-    }
-
-    /**
-     * @dev Sets the bit at `index`.
-     */
-    function set(BitMap storage bitmap, uint256 index) internal {
-        uint256 bucket = index >> 8;
-        uint256 mask = 1 << (index & 0xff);
-        bitmap._data[bucket] |= mask;
-    }
-
-    /**
-     * @dev Unsets the bit at `index`.
-     */
-    function unset(BitMap storage bitmap, uint256 index) internal {
-        uint256 bucket = index >> 8;
-        uint256 mask = 1 << (index & 0xff);
-        bitmap._data[bucket] &= ~mask;
-    }
-}
 error AlreadyClaimed();
 error InvalidProof();
 
@@ -55,17 +12,21 @@ contract MerkleDistributor {
     using SafeERC20 for IERC20;
     using BitMaps for BitMaps.BitMap;
 
-    address public immutable override token;
-    bytes32 public immutable override merkleRoot;
+    address public immutable token;
+    bytes32 public immutable merkleRoot;
 
     BitMaps.BitMap private claimedBitMap;
+
+    /** EVENTS **/
+    event Claimed(uint256 index, address account, uint256 amount);
+    event ClaimedNft(uint256 index, address account, uint256 tokenId);
 
     constructor(address token_, bytes32 merkleRoot_) {
         token = token_;
         merkleRoot = merkleRoot_;
     }
 
-    function isClaimed(uint256 index) public view override returns (bool) {
+    function isClaimed(uint256 index) public view returns (bool) {
         return claimedBitMap.get(index);
     }
 
@@ -78,7 +39,7 @@ contract MerkleDistributor {
         address account,
         uint256 amount,
         bytes32[] calldata merkleProof
-    ) public virtual override {
+    ) public virtual {
         if (isClaimed(index)) revert AlreadyClaimed();
 
         // Verify the merkle proof.

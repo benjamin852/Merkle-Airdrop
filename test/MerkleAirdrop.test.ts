@@ -1,9 +1,12 @@
+//FOR NFT AIRDROP
+
 import { ethers } from "hardhat";
 import { expect } from "chai";
-// import { MerkleTree } from "merkletreejs";
 import { BigNumber, BigNumberish, constants } from "ethers";
 import { keccak256, defaultAbiCoder } from "ethers/lib/utils";
 import { MerkleTree } from "merkletreejs";
+import {tokens} from './utils/tokens.json'
+import MerkleAirdrop from '../contracts/MerkleAirdrop.sol';
 
 const overrides = {
   gasLimit: 9999999,
@@ -18,11 +21,10 @@ let accounts: any[];
 
 beforeEach(async () => {
   const [owner, addr1, addr2] = await ethers.getSigners();
-  accounts = [owner, addr1, addr2];
 
-  const Token = await ethers.getContractFactory("Token");
-  token = await Token.deploy();
-  await token.deployed();
+
+let merkleTree;
+    merkleTree = new MerkleTree(Object.entries(tokens)); //not finished!
 
   merkleAirdrop = await (
     await ethers.getContractFactory("MerkleAirdrop")

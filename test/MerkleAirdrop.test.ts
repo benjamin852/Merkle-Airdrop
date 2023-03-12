@@ -1,83 +1,104 @@
 //FOR NFT AIRDROP
 
-import { ethers } from "hardhat";
-import { expect } from "chai";
-import { BigNumber, BigNumberish, constants } from "ethers";
-import { keccak256, defaultAbiCoder } from "ethers/lib/utils";
-import { MerkleTree } from "merkletreejs";
-import {tokens} from './utils/tokens.json'
-import MerkleAirdrop from '../contracts/MerkleAirdrop.sol';
+import { ethers } from 'hardhat'
+import { expect } from 'chai'
+// import { keccak256, defaultAbiCoder } from "ethers/lib/utils";
+import { MerkleTree } from 'merkletreejs'
+import tokens from './utils/tokens.json'
+import MerkleAirdrop from '../contracts/MerkleAirdrop.sol'
+import { BigNumber } from 'ethers'
+import { keccak256 } from 'ethers/lib/utils'
 
 const overrides = {
-  gasLimit: 9999999,
-};
+    gasLimit: 9999999,
+}
 
-const merkleRoot =
-  "0x992a599fd84f199d7a3ca10559ebcc9d638fd74a200c28a5fc5fcafc8798d8a1";
+const merkleRoot = '0x992a599fd84f199d7a3ca10559ebcc9d638fd74a200c28a5fc5fcafc8798d8a1'
 
-let merkleAirdrop: MerkleAirdrop;
-let token: any;
-let accounts: any[];
+let merkleAirdrop: MerkleAirdrop
+let merkleTree: MerkleTree
+let token: any
+let accounts: any[]
+
+function hashToken(tokenId: any, account: any) {
+    return Buffer.from(
+        ethers.utils.solidityKeccak256(['uint256', 'address'], [tokenId, account]).slice(2),
+        'hex'
+    )
+}
 
 beforeEach(async () => {
-  const [owner, addr1, addr2] = await ethers.getSigners();
+    // const [owner] = await ethers.getSigners();
+    const elements: { account: string; tokenId: BigNumber }[] = []
 
+    merkleTree = new MerkleTree(
+        Object.entries(tokens).map((token) => hashToken(...token)),
+        keccak256,
+        { sortPairs: true }
+    )
 
-let merkleTree;
-    merkleTree = new MerkleTree(Object.entries(tokens)); //not finished!
+    merkleAirdrop = await (
+        await ethers.getContractFactory('MerkleAirdrop')
+    ).deploy(token.address, merkleRoot)
 
-  merkleAirdrop = await (
-    await ethers.getContractFactory("MerkleAirdrop")
-  ).deploy(token.address, merkleRoot);
-  await merkleAirdrop.deployed();
-});
+    await merkleAirdrop.deployed()
+})
 
-describe("MerkleAirdrop", function () {
-  it("should fail if the merkle proof is invalid", async function () {
-    const recipient = accounts[0].address;
-    const index = 0;
-    const amount = BigNumber.from("100");
+describe('MerkleAirdrop', function () {
+    it('should fail if the merkle proof is invalid', async function () {
+        const recipient = accounts[0].address
+        const index = 0
+        const amount = BigNumber.from('100')
 
-    const leaf = keccak256(
-      defaultAbiCoder.encode(["uint256", "address", "uint256"], [index, recipient, amount])
-    );
-    const invalidProof = new MerkleTree([leaf], 1).getHexProof(leaf);
+        const leaf = ethers.utils.keccak256(
+            ethers.utils.defaultAbiCoder.encode(
+                ['uint256', 'address', 'uint256'],
+                [index, recipient, amount]
+            )
+        )
+        const invalidProof = new MerkleTree([leaf], 1).getHexProof(leaf)
 
-    await expect(
-      merkleAirdrop.claim(index, recipient, amount, invalidProof)
-    ).to.be.revertedWith("Invalid proof");
-  });
+        await expect(
+            merkleAirdrop.claim(index, recipient, amount, invalidProof)
+        ).to.be.revertedWith('Invalid proof')
+    })
 
-  it("should fail if the index has already been claimed", async function () {
-    const recipient = accounts[0].address;
-    const index = 0;
-    const amount = BigNumber.from("100");
+    it('should fail if the index has already been claimed', async function () {
+        const recipient = accounts[0].address
+        const index = 0
+        const amount = BigNumber.from('100')
 
-    const leaf = keccak256(
-      defaultAbiCoder.encode(["uint256", "address", "uint256"], [index, recipient, amount])
-    );
-    const proof = new MerkleTree([leaf], 1).getHexProof(leaf);
+        const leaf = ethers.utils.keccak256(
+            ethers.utils.defaultAbiCoder.encode(
+                ['uint256', 'address', 'uint256'],
+                [index, recipient, amount]
+            )
+        )
+        const proof = new MerkleTree([leaf], 1).getHexProof(leaf)
 
-    await merkleAirdrop.claim(index, recipient, amount, proof);
+        await merkleAirdrop.claim(index, recipient, amount, proof)
 
-    await expect(
-      merkleAirdrop.claim(index, recipient, amount, proof)
-    ).to.be.revertedWith("MerkleAirdrop: Drop already claimed");
-  });
+        await expect(merkleAirdrop.claim(index, recipient, amount, proof)).to.be.revertedWith(
+            'MerkleAirdrop: Drop already claimed'
+        )
+    })
 
-  it("should distribute tokens correctly", async function () {
-    const recipient = accounts[0].address;
-    const index = 0;
-    const amount = BigNumber.from("100");
+    it('should distribute tokens correctly', async function () {
+        const recipient = accounts[0].address
+        const index = 0
+        const amount = BigNumber.from('100')
 
-    const leaf = keccak256(
-      defaultAbiCoder.encode(["uint256", "address", "uint256"], [index, recipient, amount])
-    );
-    const proof = new MerkleTree([leaf], 1).getHexProof(leaf);
+        const leaf = ethers.utils.keccak256(
+            ethers.utils.defaultAbiCoder.encode(
+                ['uint256', 'address', 'uint256'],
+                [index, recipient, amount]
+            )
+        )
+        const proof = new MerkleTree([leaf], 1).getHexProof(leaf)
 
-    await merkleAirdrop.claim(index, recipient, amount, proof);
+        await merkleAirdrop.claim(index, recipient, amount, proof)
 
-    const balance = await token.balanceOf(recipient);
-    expect(balance).to.eq(amount);
-  });
-});
+        const balance = await token.balanceOf(recipient)
+        expect(balance).to.eq(amount)
+    })
+})

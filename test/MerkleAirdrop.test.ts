@@ -11,6 +11,8 @@ import { BigNumber } from 'ethers'
 import { keccak256 } from 'ethers/lib/utils'
 import { Address } from 'ethers/utils'
 
+const BN = (number: number) => ethers.BigNumber.from(number)
+
 const overrides = {
     gasLimit: 9999999,
 }
@@ -110,11 +112,11 @@ describe('MerkleAirdrop', function () {
 
         // Convert the bytes32 value to a Buffer
         const paddedValue = ethers.utils.hexZeroPad(rootFromContract, 32)
-        const bufferValue = Buffer.from(paddedValue.substr(2), 'hex')
+        const bufferValue = Buffer.from(paddedValue.slice(2), 'hex')
         expect(root).to.deep.equal(bufferValue)
 
         const receiverBalance = await token.balanceOf(account)
-        console.log(receiverBalance.toString(), 'the receiver balance')
+        expect(receiverBalance).to.eql(BN(0))
 
         for (const token of elements) {
             //get leaf
@@ -128,9 +130,6 @@ describe('MerkleAirdrop', function () {
             await merkleAirdrop.claim(token.tokenId, account, proof)
         }
         const receiverBalanceAfter = await token.balanceOf(account)
-        console.log(receiverBalanceAfter.toString(), 'the receiver balance')
-
-        // const balance = await token.balanceOf(recipient)
-        // expect(balance).to.eq(amount)
+        expect(receiverBalanceAfter).to.eql(BN(1000))
     })
 })

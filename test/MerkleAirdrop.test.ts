@@ -2,6 +2,7 @@
 
 import { ethers } from 'hardhat'
 import { expect } from 'chai'
+import { solidity } from 'ethereum-waffle'
 // import { keccak256, defaultAbiCoder } from "ethers/lib/utils";
 import { MerkleTree } from 'merkletreejs'
 import tokens from './utils/tokens.json'
@@ -70,42 +71,8 @@ describe('MerkleAirdrop', function () {
 
         await merkleAirdrop.deployed()
     })
-    /*
-    it('should fail if the merkle proof is invalid', async function () {
-        const recipient = receiver.address
-        const index = 0
-        // const tokenId = BigNumber.from('100')
-
-        const leaf = ethers.utils.keccak256(
-            ethers.utils.defaultAbiCoder.encode(['uint256', 'address'], [index, recipient])
-        )
-        const invalidProof = new MerkleTree([leaf], 1).getHexProof(leaf)
-
-        await expect(merkleAirdrop.claim(index, recipient, invalidProof)).to.be.revertedWith(
-            'Invalid proof'
-        )
-    })
-
-    it('should fail if the index has already been claimed', async function () {
-        const recipient = accounts[0].address
-        const index = 0
-        const amount = BigNumber.from('100')
-
-        const leaf = ethers.utils.keccak256(
-            ethers.utils.defaultAbiCoder.encode(['uint256', 'address'], [index, recipient])
-        )
-        const proof = new MerkleTree([leaf], 1).getHexProof(leaf)
-
-        await merkleAirdrop.claim(index, recipient, amount, proof)
-
-        await expect(merkleAirdrop.claim(index, recipient, amount, proof)).to.be.revertedWith(
-            'MerkleAirdrop: Drop already claimed'
-        )
-    })
-*/
     it('should distribute tokens correctly', async function () {
         const account = receiver.address
-        const amount = BigNumber.from('1000')
 
         const root = merkleTree.getRoot()
         const rootFromContract = await merkleAirdrop.merkleRoot()
@@ -131,5 +98,28 @@ describe('MerkleAirdrop', function () {
         }
         const receiverBalanceAfter = await token.balanceOf(account)
         expect(receiverBalanceAfter).to.eql(BN(1000))
+    })
+    it('should fail if the merkle proof is invalid', async function () {
+        const recipient = receiver.address
+        const index = 0
+
+        const leaf = ethers.utils.keccak256(
+            ethers.utils.defaultAbiCoder.encode(['uint256', 'address'], [index, recipient])
+        )
+        const invalidProof = new MerkleTree([leaf], 1).getHexProof(leaf)
+
+        await expect(merkleAirdrop.claim(index, recipient, invalidProof)).to.be.revertedWith(
+            'InvalidProof'
+        )
+    })
+    it('should revert if attempted to mint again', async function () {
+        //get leaf
+        const leaf = toLeaf(0, receiver.address)
+        //get proof for leaf
+        const proof = merkleTree.getHexProof(leaf)
+        await merkleAirdrop.claim(0, receiver.address, proof)
+        await expect(merkleAirdrop.claim(0, receiver.address, proof)).to.be.revertedWith(
+            'AlreadyClaimed'
+        )
     })
 })

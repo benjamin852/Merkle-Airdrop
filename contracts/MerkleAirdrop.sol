@@ -6,7 +6,7 @@ import '@openzeppelin/contracts/utils/structs/BitMaps.sol';
 import '@openzeppelin/contracts/utils/cryptography/MerkleProof.sol';
 import './mocks/MockNft.sol';
 
-error AlreadyClaimed(uint256 tokenId);
+error AlreadyClaimed();
 error InvalidProof();
 
 contract MerkleAirdrop {
@@ -19,35 +19,39 @@ contract MerkleAirdrop {
     BitMaps.BitMap private claimedBitMap;
 
     /** EVENTS **/
-    event Claimed(uint256 index, address account, uint256 amount);
-    event ClaimedNft(uint256 index, address account, uint256 tokenId);
+    // event Claimed(uint256 tokenId, address account, uint256 amount);
+    event ClaimedNft(uint256 tokenId, address account);
 
     constructor(MockNft token_, bytes32 merkleRoot_) {
         token = token_;
         merkleRoot = merkleRoot_;
     }
 
-    function isClaimed(uint256 index) public view returns (bool) {
-        return claimedBitMap.get(index);
+    function isClaimed(uint256 tokenId) public view returns (bool) {
+        return claimedBitMap.get(tokenId);
     }
 
-    function _setClaimed(uint256 index) private {
-        claimedBitMap.set(index);
+    function _setClaimed(uint256 tokenId) private {
+        claimedBitMap.set(tokenId);
     }
 
-    function claim(uint256 index, address account, bytes32[] calldata merkleProof) public virtual {
-        if (isClaimed(index)) revert AlreadyClaimed(index);
+    function claim(
+        uint256 tokenId,
+        address account,
+        bytes32[] calldata merkleProof
+    ) public virtual {
+        if (isClaimed(tokenId)) revert AlreadyClaimed();
 
         // Verify the merkle proof.
-        bytes32 node = keccak256(abi.encodePacked(index, account));
-        if (!MerkleProof.verify(merkleProof, merkleRoot, node)) revert InvalidProof();
+        bytes32 leaf = keccak256(abi.encodePacked(tokenId, account));
+        if (!MerkleProof.verify(merkleProof, merkleRoot, leaf)) revert InvalidProof();
 
         // Mark it claimed and send the token.
-        _setClaimed(index);
+        _setClaimed(tokenId);
 
         // IERC20(token).safeTransfer(account, amount);
-        token.redeem(account, index, merkleProof);
+        token.redeem(account, tokenId, merkleProof);
 
-        // emit Claimed(index, account, amount);
+        emit ClaimedNft(tokenId, account);
     }
 }

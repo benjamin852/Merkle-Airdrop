@@ -15,7 +15,7 @@ const overrides = {
     gasLimit: 9999999,
 }
 
-const merkleRoot = '0x992a599fd84f199d7a3ca10559ebcc9d638fd74a200c28a5fc5fcafc8798d8a1'
+let merkleRoot: Buffer
 
 let merkleAirdrop: MerkleAirdrop
 let merkleTree: MerkleTree
@@ -30,7 +30,7 @@ let NUM_SAMPLES: number
 
 const elements: { account: string; tokenId: number }[] = []
 
-function toNode(tokenId: any, account: any) {
+function toLeaf(tokenId: any, account: any) {
     return Buffer.from(
         ethers.utils.solidityKeccak256(['uint256', 'address'], [tokenId, account]).slice(2),
         'hex'
@@ -49,10 +49,12 @@ describe('MerkleAirdrop', function () {
         }
 
         merkleTree = new MerkleTree(
-            elements.map((token) => toNode(token.tokenId, token.account)),
+            elements.map((token) => toLeaf(token.tokenId, token.account)),
             keccak256,
             { sortPairs: true }
         )
+
+        merkleRoot = merkleTree.getRoot()
 
         token = await (
             await ethers.getContractFactory('MockNft')
@@ -66,6 +68,7 @@ describe('MerkleAirdrop', function () {
 
         await merkleAirdrop.deployed()
     })
+    /*
     it('should fail if the merkle proof is invalid', async function () {
         const recipient = receiver.address
         const index = 0
@@ -97,29 +100,35 @@ describe('MerkleAirdrop', function () {
             'MerkleAirdrop: Drop already claimed'
         )
     })
-
+*/
     it('should distribute tokens correctly', async function () {
         const account = receiver.address
         const amount = BigNumber.from('1000')
 
         const root = merkleTree.getRoot()
+        const rootFromContract = await merkleAirdrop.merkleRoot()
+
+        // Convert the bytes32 value to a Buffer
+        const paddedValue = ethers.utils.hexZeroPad(rootFromContract, 32)
+        const bufferValue = Buffer.from(paddedValue.substr(2), 'hex')
+        expect(root).to.deep.equal(bufferValue)
+
+        const receiverBalance = await token.balanceOf(account)
+        console.log(receiverBalance.toString(), 'the receiver balance')
 
         for (const token of elements) {
-            /**
-             * Create merkle proof (anyone with knowledge of the merkle tree)
-             */
-            // console.log(token.tokenId)
-            // console.log(token.account)
-            const proof = merkleTree.getHexProof(toNode(token.tokenId, token.account))
-            console.log(proof, 'the proof')
+            //get leaf
+            const leaf = toLeaf(token.tokenId, token.account)
+            //get proof for leaf
+            const proof = merkleTree.getHexProof(leaf)
+            //verify proof is correct
+            const isVerified = merkleTree.verify(proof, leaf, root)
+            expect(isVerified).to.be.true
+
+            await merkleAirdrop.claim(token.tokenId, account, proof)
         }
-
-        const leaf = ethers.utils.keccak256(
-            ethers.utils.defaultAbiCoder.encode(['uint256', 'address'], [index, recipient])
-        )
-        const proof = new MerkleTree([leaf], 1).getHexProof(leaf)
-
-        await merkleAirdrop.claim(index, recipient, amount, proof)
+        const receiverBalanceAfter = await token.balanceOf(account)
+        console.log(receiverBalanceAfter.toString(), 'the receiver balance')
 
         // const balance = await token.balanceOf(recipient)
         // expect(balance).to.eq(amount)

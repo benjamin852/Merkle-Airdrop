@@ -10,36 +10,55 @@ error AlreadyClaimed();
 error InvalidProof();
 
 contract MerkleAirdrop {
+    /** LIBRARIES **/
     using SafeERC20 for IERC20;
     using BitMaps for BitMaps.BitMap;
 
+    /** GENERAL STORAGE VARS **/
     MockNft public immutable token;
     bytes32 public immutable merkleRoot;
 
     BitMaps.BitMap private claimedBitMap;
 
     /** EVENTS **/
-    // event Claimed(uint256 tokenId, address account, uint256 amount);
     event ClaimedNft(uint256 tokenId, address account);
 
+    /** CONSTRUCTOR **/
     constructor(MockNft token_, bytes32 merkleRoot_) {
         token = token_;
         merkleRoot = merkleRoot_;
     }
 
-    function isClaimed(uint256 tokenId) public view returns (bool) {
-        return claimedBitMap.get(tokenId);
+    /** FUNCTIONS **/
+
+    /**
+     * @notice checks bitMap to see if token claimed
+     * @param tokenId the token being checked
+     * @return claimed bool if token is claimed
+     */
+    function isClaimed(uint256 tokenId) public view returns (bool claimed) {
+        claimed = claimedBitMap.get(tokenId);
     }
 
+    /**
+     * @notice sets bitMap for a claimed token
+     * @param tokenId tokenId to set claimed
+     */
     function _setClaimed(uint256 tokenId) private {
         claimedBitMap.set(tokenId);
     }
 
+    /**
+     * @notice claims a token
+     * @param tokenId the token that is being claimed
+     * @param account the account claiming the token
+     * @param merkleProof  the proof used to claim the token
+     */
     function claim(
         uint256 tokenId,
         address account,
         bytes32[] calldata merkleProof
-    ) public virtual {
+    ) external virtual {
         if (isClaimed(tokenId)) revert AlreadyClaimed();
 
         // Verify the merkle proof.

@@ -2,34 +2,22 @@
 
 import { ethers } from 'hardhat'
 import { expect } from 'chai'
-import { solidity } from 'ethereum-waffle'
-// import { keccak256, defaultAbiCoder } from "ethers/lib/utils";
 import { MerkleTree } from 'merkletreejs'
-import tokens from './utils/tokens.json'
+import { keccak256, Address } from 'ethers/utils'
 import MerkleAirdrop from '../contracts/MerkleAirdrop.sol'
 import MockNft from '../contracts/mocks/MockNft.sol'
-import { BigNumber } from 'ethers'
-import { keccak256 } from 'ethers/lib/utils'
-import { Address } from 'ethers/utils'
 
 const BN = (number: number) => ethers.BigNumber.from(number)
-
-const overrides = {
-    gasLimit: 9999999,
-}
 
 let merkleRoot: Buffer
 
 let merkleAirdrop: MerkleAirdrop
 let merkleTree: MerkleTree
 let token: MockNft
-let accounts: any[]
 
-let owner: Address
 let receiver: Address
 
 let NUM_LEAVES: number
-let NUM_SAMPLES: number
 
 const elements: { account: string; tokenId: number }[] = []
 
@@ -42,10 +30,9 @@ function toLeaf(tokenId: any, account: any) {
 
 describe('MerkleAirdrop', function () {
     beforeEach(async () => {
-        ;[owner, receiver] = await ethers.getSigners()
+        ;[receiver] = await ethers.getSigners()
 
         NUM_LEAVES = 1000
-        NUM_SAMPLES = 25
         for (let index = 0; index < NUM_LEAVES; index++) {
             const node = { tokenId: index, account: receiver.address }
             elements.push(node)

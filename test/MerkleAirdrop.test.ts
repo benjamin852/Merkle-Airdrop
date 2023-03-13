@@ -6,6 +6,7 @@ import { expect } from 'chai'
 import { MerkleTree } from 'merkletreejs'
 import tokens from './utils/tokens.json'
 import MerkleAirdrop from '../contracts/MerkleAirdrop.sol'
+import MockNft from '../contracts/mocks/MockNft.sol'
 import { BigNumber } from 'ethers'
 import { keccak256 } from 'ethers/lib/utils'
 
@@ -17,10 +18,10 @@ const merkleRoot = '0x992a599fd84f199d7a3ca10559ebcc9d638fd74a200c28a5fc5fcafc87
 
 let merkleAirdrop: MerkleAirdrop
 let merkleTree: MerkleTree
-let token: any
+let token: MockNft
 let accounts: any[]
 
-function hashToken(tokenId: any, account: any) {
+function toNode(tokenId: any, account: any) {
     return Buffer.from(
         ethers.utils.solidityKeccak256(['uint256', 'address'], [tokenId, account]).slice(2),
         'hex'
@@ -28,14 +29,27 @@ function hashToken(tokenId: any, account: any) {
 }
 
 beforeEach(async () => {
-    // const [owner] = await ethers.getSigners();
-    const elements: { account: string; tokenId: BigNumber }[] = []
+    const [owner, receiver] = await ethers.getSigners()
+
+    const elements: { account: string; tokenId: number }[] = []
+    const NUM_LEAVES = 10_000
+    const NUM_SAMPLES = 25
+    for (let index = 0; index < NUM_LEAVES; index++) {
+        const node = { tokenId: index, account: receiver.address }
+        elements.push(node)
+    }
 
     merkleTree = new MerkleTree(
-        Object.entries(tokens).map((token) => hashToken(...token)),
+        elements.map((token) => toNode(token.account, token.tokenId)),
         keccak256,
         { sortPairs: true }
     )
+
+    token = await (
+        await ethers.getContractFactory('MockNft')
+    ).deploy("Ben's nft", 'BNFT', merkleTree.getHexRoot())
+
+    await token.deployed()
 
     merkleAirdrop = await (
         await ethers.getContractFactory('MerkleAirdrop')

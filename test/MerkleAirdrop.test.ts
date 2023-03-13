@@ -37,36 +37,35 @@ function toNode(tokenId: any, account: any) {
     )
 }
 
-beforeEach(async () => {
-    ;[owner, receiver] = await ethers.getSigners()
-
-    NUM_LEAVES = 1000
-    NUM_SAMPLES = 25
-    for (let index = 0; index < NUM_LEAVES; index++) {
-        const node = { tokenId: index, account: receiver.address }
-        elements.push(node)
-    }
-
-    merkleTree = new MerkleTree(
-        elements.map((token) => toNode(token.account, token.tokenId)),
-        keccak256,
-        { sortPairs: true }
-    )
-
-    token = await (
-        await ethers.getContractFactory('MockNft')
-    ).deploy("Ben's nft", 'BNFT', merkleTree.getHexRoot())
-
-    await token.deployed()
-
-    merkleAirdrop = await (
-        await ethers.getContractFactory('MerkleAirdrop')
-    ).deploy(token.address, merkleRoot)
-
-    await merkleAirdrop.deployed()
-})
-
 describe('MerkleAirdrop', function () {
+    beforeEach(async () => {
+        ;[owner, receiver] = await ethers.getSigners()
+
+        NUM_LEAVES = 1000
+        NUM_SAMPLES = 25
+        for (let index = 0; index < NUM_LEAVES; index++) {
+            const node = { tokenId: index, account: receiver.address }
+            elements.push(node)
+        }
+
+        merkleTree = new MerkleTree(
+            elements.map((token) => toNode(token.tokenId, token.account)),
+            keccak256,
+            { sortPairs: true }
+        )
+
+        token = await (
+            await ethers.getContractFactory('MockNft')
+        ).deploy("Ben's nft", 'BNFT', merkleTree.getHexRoot())
+
+        await token.deployed()
+
+        merkleAirdrop = await (
+            await ethers.getContractFactory('MerkleAirdrop')
+        ).deploy(token.address, merkleRoot)
+
+        await merkleAirdrop.deployed()
+    })
     it('should fail if the merkle proof is invalid', async function () {
         const recipient = receiver.address
         const index = 0
@@ -88,10 +87,7 @@ describe('MerkleAirdrop', function () {
         const amount = BigNumber.from('100')
 
         const leaf = ethers.utils.keccak256(
-            ethers.utils.defaultAbiCoder.encode(
-                ['uint256', 'address', 'uint256'],
-                [index, recipient, amount]
-            )
+            ethers.utils.defaultAbiCoder.encode(['uint256', 'address'], [index, recipient])
         )
         const proof = new MerkleTree([leaf], 1).getHexProof(leaf)
 
@@ -104,7 +100,7 @@ describe('MerkleAirdrop', function () {
 
     it('should distribute tokens correctly', async function () {
         const account = receiver.address
-        const amount = BigNumber.from('10000')
+        const amount = BigNumber.from('1000')
 
         const root = merkleTree.getRoot()
 
@@ -112,8 +108,10 @@ describe('MerkleAirdrop', function () {
             /**
              * Create merkle proof (anyone with knowledge of the merkle tree)
              */
+            // console.log(token.tokenId)
+            // console.log(token.account)
             const proof = merkleTree.getHexProof(toNode(token.tokenId, token.account))
-            console.log(proof, 'proof')
+            console.log(proof, 'the proof')
         }
 
         const leaf = ethers.utils.keccak256(

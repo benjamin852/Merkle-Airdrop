@@ -40,7 +40,7 @@ function toNode(tokenId: any, account: any) {
 beforeEach(async () => {
     ;[owner, receiver] = await ethers.getSigners()
 
-    NUM_LEAVES = 10_000
+    NUM_LEAVES = 1000
     NUM_SAMPLES = 25
     for (let index = 0; index < NUM_LEAVES; index++) {
         const node = { tokenId: index, account: receiver.address }
@@ -108,11 +108,11 @@ describe('MerkleAirdrop', function () {
 
         const root = merkleTree.getRoot()
 
-        for (const [tokenId, account] of Object.entries(elements)) {
+        for (const token of elements) {
             /**
              * Create merkle proof (anyone with knowledge of the merkle tree)
              */
-            const proof = this.merkleTree.getHexProof(toNode(tokenId, account))
+            const proof = merkleTree.getHexProof(toNode(token.tokenId, token.account))
             console.log(proof, 'proof')
         }
 

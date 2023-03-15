@@ -7,8 +7,14 @@ import '@openzeppelin/contracts/utils/cryptography/MerkleProof.sol';
 contract MockERC20 is ERC20 {
     bytes32 public immutable root;
 
-    constructor(string memory name, string memory symbol, bytes32 merkleRoot) ERC20(name, symbol) {
+    constructor(
+        string memory name,
+        string memory symbol,
+        uint256 _amountToMint,
+        bytes32 merkleRoot
+    ) ERC20(name, symbol) {
         root = merkleRoot;
+        _mint(msg.sender, _amountToMint);
     }
 
     /**

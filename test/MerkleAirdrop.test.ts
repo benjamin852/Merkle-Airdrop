@@ -4,14 +4,14 @@ import { ethers } from 'hardhat'
 import { expect } from 'chai'
 import { MerkleTree } from 'merkletreejs'
 import { keccak256, Address } from 'ethers/utils'
-import MerkleAirdrop from '../contracts/MerkleAirdrop.sol'
+import NFTMerkleAirdrop from '../contracts/NFTMerkleAirdrop.sol'
 import MockNft from '../contracts/mocks/MockNft.sol'
 
 const BN = (number: number) => ethers.BigNumber.from(number)
 
 let merkleRoot: Buffer
 
-let merkleAirdrop: MerkleAirdrop
+let merkleAirdrop: NFTMerkleAirdrop
 let merkleTree: MerkleTree
 let token: MockNft
 
@@ -28,7 +28,7 @@ function toLeaf(tokenId: any, account: any) {
     )
 }
 
-describe('MerkleAirdrop', function () {
+describe('NFTMerkleAirdrop', function () {
     beforeEach(async () => {
         ;[receiver] = await ethers.getSigners()
 
@@ -53,7 +53,7 @@ describe('MerkleAirdrop', function () {
         await token.deployed()
 
         merkleAirdrop = await (
-            await ethers.getContractFactory('MerkleAirdrop')
+            await ethers.getContractFactory('NFTMerkleAirdrop')
         ).deploy(token.address, merkleRoot)
 
         await merkleAirdrop.deployed()

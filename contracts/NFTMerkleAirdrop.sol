@@ -9,7 +9,7 @@ import './mocks/MockNft.sol';
 error AlreadyClaimed();
 error InvalidProof();
 
-contract MerkleAirdrop {
+contract NFTMerkleAirdrop {
     /** LIBRARIES **/
     using SafeERC20 for IERC20;
     using BitMaps for BitMaps.BitMap;

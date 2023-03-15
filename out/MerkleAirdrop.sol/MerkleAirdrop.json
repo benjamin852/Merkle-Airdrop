@@ -1,0 +1,2237 @@
+{
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "contract MockNft",
+          "name": "token_",
+          "type": "address"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "merkleRoot_",
+          "type": "bytes32"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "inputs": [],
+      "name": "AlreadyClaimed",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "InvalidProof",
+      "type": "error"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "tokenId",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        }
+      ],
+      "name": "ClaimedNft",
+      "type": "event"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "tokenId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        },
+        {
+          "internalType": "bytes32[]",
+          "name": "merkleProof",
+          "type": "bytes32[]"
+        }
+      ],
+      "name": "claim",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "tokenId",
+          "type": "uint256"
+        }
+      ],
+      "name": "isClaimed",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "claimed",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "merkleRoot",
+      "outputs": [
+        {
+          "internalType": "bytes32",
+          "name": "",
+          "type": "bytes32"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "token",
+      "outputs": [
+        {
+          "internalType": "contract MockNft",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "bytecode": {
+    "object": "0x60c060405234801561001057600080fd5b506040516105c73803806105c783398101604081905261002f91610045565b6001600160a01b0390911660805260a05261007f565b6000806040838503121561005857600080fd5b82516001600160a01b038116811461006f57600080fd5b6020939093015192949293505050565b60805160a0516105176100b060003960008181605601526101d801526000818160e7015261025601526105176000f3fe608060405234801561001057600080fd5b506004361061004c5760003560e01c80632eb4a7ab146100515780639e34070f1461008b578063f72d82cf146100cd578063fc0c546a146100e2575b600080fd5b6100787f000000000000000000000000000000000000000000000000000000000000000081565b6040519081526020015b60405180910390f35b6100bd6100993660046103a1565b600881901c600090815260208190526040812054600160ff84161b16151592915050565b6040519015158152602001610082565b6100e06100db3660046103ba565b610121565b005b6101097f000000000000000000000000000000000000000000000000000000000000000081565b6040516001600160a01b039091168152602001610082565b600884901c600090815260208190526040902054600160ff86161b161561015b57604051630c8d9eab60e31b815260040160405180910390fd5b6000848460405160200161018b92919091825260601b6bffffffffffffffffffffffff1916602082015260340190565b6040516020818303038152906040528051906020012090506102038383808060200260200160405190810160405280939291908181526020018383602002808284376000920191909152507f0000000000000000000000000000000000000000000000000000000000000000925085915061030c9050565b610220576040516309bde33960e01b815260040160405180910390fd5b600885901c60009081526020819052604090208054600160ff88161b17905560405163028265e960e31b81526001600160a01b037f000000000000000000000000000000000000000000000000000000000000000016906314132f4890610291908790899088908890600401610452565b600060405180830381600087803b1580156102ab57600080fd5b505af11580156102bf573d6000803e3d6000fd5b5050604080518881526001600160a01b03881660208201527f3fa7023c96f4790e8a40f2eb2147658bb04f0e46b300b15b82d302473bf79e15935001905060405180910390a15050505050565b6000826103198584610322565b14949350505050565b600081815b84518110156103675761035382868381518110610346576103466104a4565b602002602001015161036f565b91508061035f816104ba565b915050610327565b509392505050565b600081831061038b57600082815260208490526040902061039a565b60008381526020839052604090205b9392505050565b6000602082840312156103b357600080fd5b5035919050565b600080600080606085870312156103d057600080fd5b8435935060208501356001600160a01b03811681146103ee57600080fd5b9250604085013567ffffffffffffffff8082111561040b57600080fd5b818701915087601f83011261041f57600080fd5b81358181111561042e57600080fd5b8860208260051b850101111561044357600080fd5b95989497505060200194505050565b6001600160a01b038516815260208101849052606060408201819052810182905260006001600160fb1b0383111561048957600080fd5b8260051b808560808501379190910160800195945050505050565b634e487b7160e01b600052603260045260246000fd5b6000600182016104da57634e487b7160e01b600052601160045260246000fd5b506001019056fea2646970667358221220791abacfd462bcf31f8f09245d52db1aaf2720fff1bf18f30ca3f87d15ae574564736f6c63430008120033",
+    "sourceMap": "356:1849:0:-:0;;;732:114;;;;;;;;;;;;;;;;;;;;;;;;;;;;:::i;:::-;-1:-1:-1;;;;;791:14:0;;;;;815:24;;356:1849;;14:366:36;108:6;116;169:2;157:9;148:7;144:23;140:32;137:52;;;185:1;182;175:12;137:52;211:16;;-1:-1:-1;;;;;256:31:36;;246:42;;236:70;;302:1;299;292:12;236:70;370:2;355:18;;;;349:25;325:5;;349:25;;-1:-1:-1;;;14:366:36:o;:::-;356:1849:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;",
+    "linkReferences": {}
+  },
+  "deployedBytecode": {
+    "object": "0x608060405234801561001057600080fd5b506004361061004c5760003560e01c80632eb4a7ab146100515780639e34070f1461008b578063f72d82cf146100cd578063fc0c546a146100e2575b600080fd5b6100787f000000000000000000000000000000000000000000000000000000000000000081565b6040519081526020015b60405180910390f35b6100bd6100993660046103a1565b600881901c600090815260208190526040812054600160ff84161b16151592915050565b6040519015158152602001610082565b6100e06100db3660046103ba565b610121565b005b6101097f000000000000000000000000000000000000000000000000000000000000000081565b6040516001600160a01b039091168152602001610082565b600884901c600090815260208190526040902054600160ff86161b161561015b57604051630c8d9eab60e31b815260040160405180910390fd5b6000848460405160200161018b92919091825260601b6bffffffffffffffffffffffff1916602082015260340190565b6040516020818303038152906040528051906020012090506102038383808060200260200160405190810160405280939291908181526020018383602002808284376000920191909152507f0000000000000000000000000000000000000000000000000000000000000000925085915061030c9050565b610220576040516309bde33960e01b815260040160405180910390fd5b600885901c60009081526020819052604090208054600160ff88161b17905560405163028265e960e31b81526001600160a01b037f000000000000000000000000000000000000000000000000000000000000000016906314132f4890610291908790899088908890600401610452565b600060405180830381600087803b1580156102ab57600080fd5b505af11580156102bf573d6000803e3d6000fd5b5050604080518881526001600160a01b03881660208201527f3fa7023c96f4790e8a40f2eb2147658bb04f0e46b300b15b82d302473bf79e15935001905060405180910390a15050505050565b6000826103198584610322565b14949350505050565b600081815b84518110156103675761035382868381518110610346576103466104a4565b602002602001015161036f565b91508061035f816104ba565b915050610327565b509392505050565b600081831061038b57600082815260208490526040902061039a565b60008381526020839052604090205b9392505050565b6000602082840312156103b357600080fd5b5035919050565b600080600080606085870312156103d057600080fd5b8435935060208501356001600160a01b03811681146103ee57600080fd5b9250604085013567ffffffffffffffff8082111561040b57600080fd5b818701915087601f83011261041f57600080fd5b81358181111561042e57600080fd5b8860208260051b850101111561044357600080fd5b95989497505060200194505050565b6001600160a01b038516815260208101849052606060408201819052810182905260006001600160fb1b0383111561048957600080fd5b8260051b808560808501379190910160800195945050505050565b634e487b7160e01b600052603260045260246000fd5b6000600182016104da57634e487b7160e01b600052601160045260246000fd5b506001019056fea2646970667358221220791abacfd462bcf31f8f09245d52db1aaf2720fff1bf18f30ca3f87d15ae574564736f6c63430008120033",
+    "sourceMap": "356:1849:0:-:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;547:35;;;;;;;;160:25:36;;;148:2;133:18;547:35:0;;;;;;;;1038:124;;;;;;:::i;:::-;684:1:34;675:10;;;1095:12:0;746:20:34;;;;;;;;;;;710:1;724:4;716:12;;710:19;746:27;:32;;1119:36:0;1038:124;-1:-1:-1;;1038:124:0;;;;546:14:36;;539:22;521:41;;509:2;494:18;1038:124:0;381:187:36;1585:618:0;;;;;;:::i;:::-;;:::i;:::-;;511:30;;;;;;;;-1:-1:-1;;;;;1614:32:36;;;1596:51;;1584:2;1569:18;511:30:0;1435:218:36;1585:618:0;684:1:34;675:10;;;1095:12:0;746:20:34;;;;;;;;;;;710:1;724:4;716:12;;710:19;746:27;:32;1723:47:0;;1754:16;;-1:-1:-1;;;1754:16:0;;;;;;;;;;;1723:47;1817:12;1859:7;1868;1842:34;;;;;;;;1815:19:36;;;1872:2;1868:15;-1:-1:-1;;1864:53:36;1859:2;1850:12;;1843:75;1943:2;1934:12;;1658:294;1842:34:0;;;;;;;;;;;;;1832:45;;;;;;1817:60;;1892:49;1911:11;;1892:49;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;1924:10:0;;-1:-1:-1;1936:4:0;;-1:-1:-1;1892:18:0;;-1:-1:-1;1892:49:0:i;:::-;1887:77;;1950:14;;-1:-1:-1;;;1950:14:0;;;;;;;;;;;1887:77;1247:1:34;1238:10;;;1332:13:0;1302:20:34;;;;;;;;;;:28;;1273:1;1287:4;1279:12;;1273:19;1302:28;;;2109:43:0;;-1:-1:-1;;;2109:43:0;;-1:-1:-1;;;;;2109:5:0;:12;;;;:43;;2122:7;;2131;;2140:11;;;;2109:43;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;;2168:28:0;;;2749:25:36;;;-1:-1:-1;;;;;2810:32:36;;2805:2;2790:18;;2783:60;2168:28:0;;-1:-1:-1;2722:18:36;;-1:-1:-1;2168:28:0;;;;;;;1713:490;1585:618;;;;:::o;1156:184:30:-;1277:4;1329;1300:25;1313:5;1320:4;1300:12;:25::i;:::-;:33;;1156:184;-1:-1:-1;;;;1156:184:30:o;1994:290::-;2077:7;2119:4;2077:7;2133:116;2157:5;:12;2153:1;:16;2133:116;;;2205:33;2215:12;2229:5;2235:1;2229:8;;;;;;;;:::i;:::-;;;;;;;2205:9;:33::i;:::-;2190:48;-1:-1:-1;2171:3:30;;;;:::i;:::-;;;;2133:116;;;-1:-1:-1;2265:12:30;1994:290;-1:-1:-1;;;1994:290:30:o;8879:147::-;8942:7;8972:1;8968;:5;:51;;9100:13;9191:15;;;9226:4;9219:15;;;9272:4;9256:21;;8968:51;;;9100:13;9191:15;;;9226:4;9219:15;;;9272:4;9256:21;;8976:20;8961:58;8879:147;-1:-1:-1;;;8879:147:30:o;196:180:36:-;255:6;308:2;296:9;287:7;283:23;279:32;276:52;;;324:1;321;314:12;276:52;-1:-1:-1;347:23:36;;196:180;-1:-1:-1;196:180:36:o;573:857::-;677:6;685;693;701;754:2;742:9;733:7;729:23;725:32;722:52;;;770:1;767;760:12;722:52;793:23;;;-1:-1:-1;866:2:36;851:18;;838:32;-1:-1:-1;;;;;899:31:36;;889:42;;879:70;;945:1;942;935:12;879:70;968:5;-1:-1:-1;1024:2:36;1009:18;;996:32;1047:18;1077:14;;;1074:34;;;1104:1;1101;1094:12;1074:34;1142:6;1131:9;1127:22;1117:32;;1187:7;1180:4;1176:2;1172:13;1168:27;1158:55;;1209:1;1206;1199:12;1158:55;1249:2;1236:16;1275:2;1267:6;1264:14;1261:34;;;1291:1;1288;1281:12;1261:34;1344:7;1339:2;1329:6;1326:1;1322:14;1318:2;1314:23;1310:32;1307:45;1304:65;;;1365:1;1362;1355:12;1304:65;573:857;;;;-1:-1:-1;;1396:2:36;1388:11;;-1:-1:-1;;;573:857:36:o;1957:613::-;-1:-1:-1;;;;;2202:32:36;;2184:51;;2266:2;2251:18;;2244:34;;;2314:2;2309;2294:18;;2287:30;;;2333:18;;2326:34;;;-1:-1:-1;;;;;;2372:31:36;;2369:51;;;2416:1;2413;2406:12;2369:51;2450:6;2447:1;2443:14;2508:6;2500;2494:3;2483:9;2479:19;2466:49;2536:22;;;;2560:3;2532:32;;1957:613;-1:-1:-1;;;;;1957:613:36:o;2854:127::-;2915:10;2910:3;2906:20;2903:1;2896:31;2946:4;2943:1;2936:15;2970:4;2967:1;2960:15;2986:232;3025:3;3046:17;;;3043:140;;3105:10;3100:3;3096:20;3093:1;3086:31;3140:4;3137:1;3130:15;3168:4;3165:1;3158:15;3043:140;-1:-1:-1;3210:1:36;3199:13;;2986:232::o",
+    "linkReferences": {},
+    "immutableReferences": {
+      "23": [
+        {
+          "start": 231,
+          "length": 32
+        },
+        {
+          "start": 598,
+          "length": 32
+        }
+      ],
+      "25": [
+        {
+          "start": 86,
+          "length": 32
+        },
+        {
+          "start": 472,
+          "length": 32
+        }
+      ]
+    }
+  },
+  "methodIdentifiers": {
+    "claim(uint256,address,bytes32[])": "f72d82cf",
+    "isClaimed(uint256)": "9e34070f",
+    "merkleRoot()": "2eb4a7ab",
+    "token()": "fc0c546a"
+  },
+  "rawMetadata": "{\"compiler\":{\"version\":\"0.8.18+commit.87f61d96\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"contract MockNft\",\"name\":\"token_\",\"type\":\"address\"},{\"internalType\":\"bytes32\",\"name\":\"merkleRoot_\",\"type\":\"bytes32\"}],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"inputs\":[],\"name\":\"AlreadyClaimed\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"InvalidProof\",\"type\":\"error\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"ClaimedNft\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"internalType\":\"bytes32[]\",\"name\":\"merkleProof\",\"type\":\"bytes32[]\"}],\"name\":\"claim\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"}],\"name\":\"isClaimed\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"claimed\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"merkleRoot\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"token\",\"outputs\":[{\"internalType\":\"contract MockNft\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{\"claim(uint256,address,bytes32[])\":{\"params\":{\"account\":\"the account claiming the token\",\"merkleProof\":\"the proof used to claim the token\",\"tokenId\":\"the token that is being claimed\"}},\"isClaimed(uint256)\":{\"params\":{\"tokenId\":\"the token being checked\"},\"returns\":{\"claimed\":\"bool if token is claimed\"}}},\"version\":1},\"userdoc\":{\"events\":{\"ClaimedNft(uint256,address)\":{\"notice\":\"EVENTS *\"}},\"kind\":\"user\",\"methods\":{\"claim(uint256,address,bytes32[])\":{\"notice\":\"claims a token\"},\"constructor\":{\"notice\":\"CONSTRUCTOR *\"},\"isClaimed(uint256)\":{\"notice\":\"checks bitMap to see if token claimed\"},\"token()\":{\"notice\":\"GENERAL STORAGE VARS *\"}},\"version\":1}},\"settings\":{\"compilationTarget\":{\"contracts/MerkleAirdrop.sol\":\"MerkleAirdrop\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[\":@ethereum-waffle/=node_modules/@ethereum-waffle/\",\":@openzeppelin/=node_modules/@openzeppelin/\",\":ds-test/=lib/forge-std/lib/ds-test/src/\",\":eth-gas-reporter/=node_modules/eth-gas-reporter/\",\":forge-std/=lib/forge-std/src/\",\":hardhat/=node_modules/hardhat/\",\":openzeppelin-contracts-upgradeable/=lib/openzeppelin-contracts-upgradeable/contracts/\",\":openzeppelin-contracts/=lib/openzeppelin-contracts/contracts/\"]},\"sources\":{\"contracts/MerkleAirdrop.sol\":{\"keccak256\":\"0xa5c8f498b0673f9cbb5b1d367e407442d9ad4314c6cee1d0115f04546b78e830\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://9d3b7eaf5e5287e4e2a8a089df01761e5cd0ec0a0bf528d21a0868ae4edde0bb\",\"dweb:/ipfs/QmUTpNZku5WQuMANJmA3wPz97sHwoFqKszGVtexh14pBKu\"]},\"contracts/mocks/MockNft.sol\":{\"keccak256\":\"0xd41dd5e80df121e0733f376dfc19fea24fccb1dfd2eeb95f71520d7c36aa8bea\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://0313cfcedf294e80752512e6b51da4c70480b3a70380ecf19765ae74ae2cace7\",\"dweb:/ipfs/Qme8cMBKMQhCm7phR1tuLQ3ykq2ggwwEm3KMRtKuZ9CjjE\"]},\"node_modules/@openzeppelin/contracts/token/ERC20/IERC20.sol\":{\"keccak256\":\"0x9750c6b834f7b43000631af5cc30001c5f547b3ceb3635488f140f60e897ea6b\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://5a7d5b1ef5d8d5889ad2ed89d8619c09383b80b72ab226e0fe7bde1636481e34\",\"dweb:/ipfs/QmebXWgtEfumQGBdVeM6c71McLixYXQP5Bk6kKXuoY4Bmr\"]},\"node_modules/@openzeppelin/contracts/token/ERC20/extensions/draft-IERC20Permit.sol\":{\"keccak256\":\"0xf41ca991f30855bf80ffd11e9347856a517b977f0a6c2d52e6421a99b7840329\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://b2717fd2bdac99daa960a6de500754ea1b932093c946388c381da48658234b95\",\"dweb:/ipfs/QmP6QVMn6UeA3ByahyJbYQr5M6coHKBKsf3ySZSfbyA8R7\"]},\"node_modules/@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol\":{\"keccak256\":\"0x9b72f93be69ca894d8492c244259615c4a742afc8d63720dbc8bb81087d9b238\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://f5a7b96e511be78d5cdf635c784e6ab8cdd38625bb8cafb8a80914a1c89cf0f6\",\"dweb:/ipfs/QmVzTCwJxQAkjRQHboT5QrvsVJGWQHgfEjeTbvyxoKBrds\"]},\"node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol\":{\"keccak256\":\"0x1e854874c68bec05be100dc0092cb5fbbc71253d370ae98ddef248bbfc3fe118\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://ef0fb6e809779426dc2ac201149bbad4aecdc5810874f2843b050e8b5fef8d30\",\"dweb:/ipfs/QmPDRjaNxmcyxLUKvv8Fxk5eWcf7xvC5S9JpbtqvE7Cadu\"]},\"node_modules/@openzeppelin/contracts/token/ERC721/IERC721.sol\":{\"keccak256\":\"0xab28a56179c1db258c9bf5235b382698cb650debecb51b23d12be9e241374b68\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://daae589a9d6fa7e55f99f86c0a16796ca490f243fb3693632c3711c0646c1d56\",\"dweb:/ipfs/QmR3zpd7wNw3rcUdekwiv6FYHJqksuTCXLVioTxu6Fbxk3\"]},\"node_modules/@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol\":{\"keccak256\":\"0xa82b58eca1ee256be466e536706850163d2ec7821945abd6b4778cfb3bee37da\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://6e75cf83beb757b8855791088546b8337e9d4684e169400c20d44a515353b708\",\"dweb:/ipfs/QmYvPafLfoquiDMEj7CKHtvbgHu7TJNPSVPSCjrtjV8HjV\"]},\"node_modules/@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata.sol\":{\"keccak256\":\"0x75b829ff2f26c14355d1cba20e16fe7b29ca58eb5fef665ede48bc0f9c6c74b9\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://a0a107160525724f9e1bbbab031defc2f298296dd9e331f16a6f7130cec32146\",\"dweb:/ipfs/QmemujxSd7gX8A9M8UwmNbz4Ms3U9FG9QfudUgxwvTmPWf\"]},\"node_modules/@openzeppelin/contracts/utils/Address.sol\":{\"keccak256\":\"0xf96f969e24029d43d0df89e59d365f277021dac62b48e1c1e3ebe0acdd7f1ca1\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://ec772b45a624be516f1c81970caa8a2e144301e9d0921cbc1a2789fef39a1269\",\"dweb:/ipfs/QmNyjwxCrGhQMyzLD93oUobJXVe9ceJvRvfXwbEtuxPiEj\"]},\"node_modules/@openzeppelin/contracts/utils/Context.sol\":{\"keccak256\":\"0xe2e337e6dde9ef6b680e07338c493ebea1b5fd09b43424112868e9cc1706bca7\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://6df0ddf21ce9f58271bdfaa85cde98b200ef242a05a3f85c2bc10a8294800a92\",\"dweb:/ipfs/QmRK2Y5Yc6BK7tGKkgsgn3aJEQGi5aakeSPZvS65PV8Xp3\"]},\"node_modules/@openzeppelin/contracts/utils/Strings.sol\":{\"keccak256\":\"0xa4d1d62251f8574deb032a35fc948386a9b4de74b812d4f545a1ac120486b48a\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://8c969013129ba9e651a20735ef659fef6d8a1139ea3607bd4b26ddea2d645634\",\"dweb:/ipfs/QmVhVa6LGuzAcB8qgDtVHRkucn4ihj5UZr8xBLcJkP6ucb\"]},\"node_modules/@openzeppelin/contracts/utils/cryptography/MerkleProof.sol\":{\"keccak256\":\"0xd466e8b07f4c6220eac16da5127f3ff142e65f0c15c03c7d38f257b02c8585e1\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://e6b3cab69f655e40117bbdd8e68d7423f26d1b24248fb189c295f08de8940616\",\"dweb:/ipfs/QmWoyRthsBDMa7gJpH5UCjpa8uNUQfyaGbSgY3uvhBH9F3\"]},\"node_modules/@openzeppelin/contracts/utils/introspection/ERC165.sol\":{\"keccak256\":\"0xd10975de010d89fd1c78dc5e8a9a7e7f496198085c151648f20cba166b32582b\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://fb0048dee081f6fffa5f74afc3fb328483c2a30504e94a0ddd2a5114d731ec4d\",\"dweb:/ipfs/QmZptt1nmYoA5SgjwnSgWqgUSDgm4q52Yos3xhnMv3MV43\"]},\"node_modules/@openzeppelin/contracts/utils/introspection/IERC165.sol\":{\"keccak256\":\"0x447a5f3ddc18419d41ff92b3773fb86471b1db25773e07f877f548918a185bf1\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://be161e54f24e5c6fae81a12db1a8ae87bc5ae1b0ddc805d82a1440a68455088f\",\"dweb:/ipfs/QmP7C3CHdY9urF4dEMb9wmsp1wMxHF6nhA2yQE5SKiPAdy\"]},\"node_modules/@openzeppelin/contracts/utils/math/Math.sol\":{\"keccak256\":\"0xa1e8e83cd0087785df04ac79fb395d9f3684caeaf973d9e2c71caef723a3a5d6\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://33bbf48cc069be677705037ba7520c22b1b622c23b33e1a71495f2d36549d40b\",\"dweb:/ipfs/Qmct36zWXv3j7LZB83uwbg7TXwnZSN1fqHNDZ93GG98bGz\"]},\"node_modules/@openzeppelin/contracts/utils/structs/BitMaps.sol\":{\"keccak256\":\"0xbe43faa7ef7ac3c588d91a2f457fb90f4dc0cf9972b0eb8d9bdfa7d136f25df5\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://5ea4732350035680324e30e0e3ab8af2452cc63ef7ab790a8eb36f6acbbda9f6\",\"dweb:/ipfs/QmV1DfVg96UJJ5pk92wUBzdyosqTryxvZkq3uTJ2CztTVZ\"]}},\"version\":1}",
+  "metadata": {
+    "compiler": {
+      "version": "0.8.18+commit.87f61d96"
+    },
+    "language": "Solidity",
+    "output": {
+      "abi": [
+        {
+          "inputs": [
+            {
+              "internalType": "contract MockNft",
+              "name": "token_",
+              "type": "address"
+            },
+            {
+              "internalType": "bytes32",
+              "name": "merkleRoot_",
+              "type": "bytes32"
+            }
+          ],
+          "stateMutability": "nonpayable",
+          "type": "constructor"
+        },
+        {
+          "inputs": [],
+          "type": "error",
+          "name": "AlreadyClaimed"
+        },
+        {
+          "inputs": [],
+          "type": "error",
+          "name": "InvalidProof"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "uint256",
+              "name": "tokenId",
+              "type": "uint256",
+              "indexed": false
+            },
+            {
+              "internalType": "address",
+              "name": "account",
+              "type": "address",
+              "indexed": false
+            }
+          ],
+          "type": "event",
+          "name": "ClaimedNft",
+          "anonymous": false
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "uint256",
+              "name": "tokenId",
+              "type": "uint256"
+            },
+            {
+              "internalType": "address",
+              "name": "account",
+              "type": "address"
+            },
+            {
+              "internalType": "bytes32[]",
+              "name": "merkleProof",
+              "type": "bytes32[]"
+            }
+          ],
+          "stateMutability": "nonpayable",
+          "type": "function",
+          "name": "claim"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "uint256",
+              "name": "tokenId",
+              "type": "uint256"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function",
+          "name": "isClaimed",
+          "outputs": [
+            {
+              "internalType": "bool",
+              "name": "claimed",
+              "type": "bool"
+            }
+          ]
+        },
+        {
+          "inputs": [],
+          "stateMutability": "view",
+          "type": "function",
+          "name": "merkleRoot",
+          "outputs": [
+            {
+              "internalType": "bytes32",
+              "name": "",
+              "type": "bytes32"
+            }
+          ]
+        },
+        {
+          "inputs": [],
+          "stateMutability": "view",
+          "type": "function",
+          "name": "token",
+          "outputs": [
+            {
+              "internalType": "contract MockNft",
+              "name": "",
+              "type": "address"
+            }
+          ]
+        }
+      ],
+      "devdoc": {
+        "kind": "dev",
+        "methods": {
+          "claim(uint256,address,bytes32[])": {
+            "params": {
+              "account": "the account claiming the token",
+              "merkleProof": "the proof used to claim the token",
+              "tokenId": "the token that is being claimed"
+            }
+          },
+          "isClaimed(uint256)": {
+            "params": {
+              "tokenId": "the token being checked"
+            },
+            "returns": {
+              "claimed": "bool if token is claimed"
+            }
+          }
+        },
+        "version": 1
+      },
+      "userdoc": {
+        "kind": "user",
+        "methods": {
+          "claim(uint256,address,bytes32[])": {
+            "notice": "claims a token"
+          },
+          "constructor": {
+            "notice": "CONSTRUCTOR *"
+          },
+          "isClaimed(uint256)": {
+            "notice": "checks bitMap to see if token claimed"
+          },
+          "token()": {
+            "notice": "GENERAL STORAGE VARS *"
+          }
+        },
+        "version": 1
+      }
+    },
+    "settings": {
+      "remappings": [
+        ":@ethereum-waffle/=node_modules/@ethereum-waffle/",
+        ":@openzeppelin/=node_modules/@openzeppelin/",
+        ":ds-test/=lib/forge-std/lib/ds-test/src/",
+        ":eth-gas-reporter/=node_modules/eth-gas-reporter/",
+        ":forge-std/=lib/forge-std/src/",
+        ":hardhat/=node_modules/hardhat/",
+        ":openzeppelin-contracts-upgradeable/=lib/openzeppelin-contracts-upgradeable/contracts/",
+        ":openzeppelin-contracts/=lib/openzeppelin-contracts/contracts/"
+      ],
+      "optimizer": {
+        "enabled": true,
+        "runs": 200
+      },
+      "metadata": {
+        "bytecodeHash": "ipfs"
+      },
+      "compilationTarget": {
+        "contracts/MerkleAirdrop.sol": "MerkleAirdrop"
+      },
+      "libraries": {}
+    },
+    "sources": {
+      "contracts/MerkleAirdrop.sol": {
+        "keccak256": "0xa5c8f498b0673f9cbb5b1d367e407442d9ad4314c6cee1d0115f04546b78e830",
+        "urls": [
+          "bzz-raw://9d3b7eaf5e5287e4e2a8a089df01761e5cd0ec0a0bf528d21a0868ae4edde0bb",
+          "dweb:/ipfs/QmUTpNZku5WQuMANJmA3wPz97sHwoFqKszGVtexh14pBKu"
+        ],
+        "license": "MIT"
+      },
+      "contracts/mocks/MockNft.sol": {
+        "keccak256": "0xd41dd5e80df121e0733f376dfc19fea24fccb1dfd2eeb95f71520d7c36aa8bea",
+        "urls": [
+          "bzz-raw://0313cfcedf294e80752512e6b51da4c70480b3a70380ecf19765ae74ae2cace7",
+          "dweb:/ipfs/Qme8cMBKMQhCm7phR1tuLQ3ykq2ggwwEm3KMRtKuZ9CjjE"
+        ],
+        "license": "MIT"
+      },
+      "node_modules/@openzeppelin/contracts/token/ERC20/IERC20.sol": {
+        "keccak256": "0x9750c6b834f7b43000631af5cc30001c5f547b3ceb3635488f140f60e897ea6b",
+        "urls": [
+          "bzz-raw://5a7d5b1ef5d8d5889ad2ed89d8619c09383b80b72ab226e0fe7bde1636481e34",
+          "dweb:/ipfs/QmebXWgtEfumQGBdVeM6c71McLixYXQP5Bk6kKXuoY4Bmr"
+        ],
+        "license": "MIT"
+      },
+      "node_modules/@openzeppelin/contracts/token/ERC20/extensions/draft-IERC20Permit.sol": {
+        "keccak256": "0xf41ca991f30855bf80ffd11e9347856a517b977f0a6c2d52e6421a99b7840329",
+        "urls": [
+          "bzz-raw://b2717fd2bdac99daa960a6de500754ea1b932093c946388c381da48658234b95",
+          "dweb:/ipfs/QmP6QVMn6UeA3ByahyJbYQr5M6coHKBKsf3ySZSfbyA8R7"
+        ],
+        "license": "MIT"
+      },
+      "node_modules/@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol": {
+        "keccak256": "0x9b72f93be69ca894d8492c244259615c4a742afc8d63720dbc8bb81087d9b238",
+        "urls": [
+          "bzz-raw://f5a7b96e511be78d5cdf635c784e6ab8cdd38625bb8cafb8a80914a1c89cf0f6",
+          "dweb:/ipfs/QmVzTCwJxQAkjRQHboT5QrvsVJGWQHgfEjeTbvyxoKBrds"
+        ],
+        "license": "MIT"
+      },
+      "node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol": {
+        "keccak256": "0x1e854874c68bec05be100dc0092cb5fbbc71253d370ae98ddef248bbfc3fe118",
+        "urls": [
+          "bzz-raw://ef0fb6e809779426dc2ac201149bbad4aecdc5810874f2843b050e8b5fef8d30",
+          "dweb:/ipfs/QmPDRjaNxmcyxLUKvv8Fxk5eWcf7xvC5S9JpbtqvE7Cadu"
+        ],
+        "license": "MIT"
+      },
+      "node_modules/@openzeppelin/contracts/token/ERC721/IERC721.sol": {
+        "keccak256": "0xab28a56179c1db258c9bf5235b382698cb650debecb51b23d12be9e241374b68",
+        "urls": [
+          "bzz-raw://daae589a9d6fa7e55f99f86c0a16796ca490f243fb3693632c3711c0646c1d56",
+          "dweb:/ipfs/QmR3zpd7wNw3rcUdekwiv6FYHJqksuTCXLVioTxu6Fbxk3"
+        ],
+        "license": "MIT"
+      },
+      "node_modules/@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol": {
+        "keccak256": "0xa82b58eca1ee256be466e536706850163d2ec7821945abd6b4778cfb3bee37da",
+        "urls": [
+          "bzz-raw://6e75cf83beb757b8855791088546b8337e9d4684e169400c20d44a515353b708",
+          "dweb:/ipfs/QmYvPafLfoquiDMEj7CKHtvbgHu7TJNPSVPSCjrtjV8HjV"
+        ],
+        "license": "MIT"
+      },
+      "node_modules/@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata.sol": {
+        "keccak256": "0x75b829ff2f26c14355d1cba20e16fe7b29ca58eb5fef665ede48bc0f9c6c74b9",
+        "urls": [
+          "bzz-raw://a0a107160525724f9e1bbbab031defc2f298296dd9e331f16a6f7130cec32146",
+          "dweb:/ipfs/QmemujxSd7gX8A9M8UwmNbz4Ms3U9FG9QfudUgxwvTmPWf"
+        ],
+        "license": "MIT"
+      },
+      "node_modules/@openzeppelin/contracts/utils/Address.sol": {
+        "keccak256": "0xf96f969e24029d43d0df89e59d365f277021dac62b48e1c1e3ebe0acdd7f1ca1",
+        "urls": [
+          "bzz-raw://ec772b45a624be516f1c81970caa8a2e144301e9d0921cbc1a2789fef39a1269",
+          "dweb:/ipfs/QmNyjwxCrGhQMyzLD93oUobJXVe9ceJvRvfXwbEtuxPiEj"
+        ],
+        "license": "MIT"
+      },
+      "node_modules/@openzeppelin/contracts/utils/Context.sol": {
+        "keccak256": "0xe2e337e6dde9ef6b680e07338c493ebea1b5fd09b43424112868e9cc1706bca7",
+        "urls": [
+          "bzz-raw://6df0ddf21ce9f58271bdfaa85cde98b200ef242a05a3f85c2bc10a8294800a92",
+          "dweb:/ipfs/QmRK2Y5Yc6BK7tGKkgsgn3aJEQGi5aakeSPZvS65PV8Xp3"
+        ],
+        "license": "MIT"
+      },
+      "node_modules/@openzeppelin/contracts/utils/Strings.sol": {
+        "keccak256": "0xa4d1d62251f8574deb032a35fc948386a9b4de74b812d4f545a1ac120486b48a",
+        "urls": [
+          "bzz-raw://8c969013129ba9e651a20735ef659fef6d8a1139ea3607bd4b26ddea2d645634",
+          "dweb:/ipfs/QmVhVa6LGuzAcB8qgDtVHRkucn4ihj5UZr8xBLcJkP6ucb"
+        ],
+        "license": "MIT"
+      },
+      "node_modules/@openzeppelin/contracts/utils/cryptography/MerkleProof.sol": {
+        "keccak256": "0xd466e8b07f4c6220eac16da5127f3ff142e65f0c15c03c7d38f257b02c8585e1",
+        "urls": [
+          "bzz-raw://e6b3cab69f655e40117bbdd8e68d7423f26d1b24248fb189c295f08de8940616",
+          "dweb:/ipfs/QmWoyRthsBDMa7gJpH5UCjpa8uNUQfyaGbSgY3uvhBH9F3"
+        ],
+        "license": "MIT"
+      },
+      "node_modules/@openzeppelin/contracts/utils/introspection/ERC165.sol": {
+        "keccak256": "0xd10975de010d89fd1c78dc5e8a9a7e7f496198085c151648f20cba166b32582b",
+        "urls": [
+          "bzz-raw://fb0048dee081f6fffa5f74afc3fb328483c2a30504e94a0ddd2a5114d731ec4d",
+          "dweb:/ipfs/QmZptt1nmYoA5SgjwnSgWqgUSDgm4q52Yos3xhnMv3MV43"
+        ],
+        "license": "MIT"
+      },
+      "node_modules/@openzeppelin/contracts/utils/introspection/IERC165.sol": {
+        "keccak256": "0x447a5f3ddc18419d41ff92b3773fb86471b1db25773e07f877f548918a185bf1",
+        "urls": [
+          "bzz-raw://be161e54f24e5c6fae81a12db1a8ae87bc5ae1b0ddc805d82a1440a68455088f",
+          "dweb:/ipfs/QmP7C3CHdY9urF4dEMb9wmsp1wMxHF6nhA2yQE5SKiPAdy"
+        ],
+        "license": "MIT"
+      },
+      "node_modules/@openzeppelin/contracts/utils/math/Math.sol": {
+        "keccak256": "0xa1e8e83cd0087785df04ac79fb395d9f3684caeaf973d9e2c71caef723a3a5d6",
+        "urls": [
+          "bzz-raw://33bbf48cc069be677705037ba7520c22b1b622c23b33e1a71495f2d36549d40b",
+          "dweb:/ipfs/Qmct36zWXv3j7LZB83uwbg7TXwnZSN1fqHNDZ93GG98bGz"
+        ],
+        "license": "MIT"
+      },
+      "node_modules/@openzeppelin/contracts/utils/structs/BitMaps.sol": {
+        "keccak256": "0xbe43faa7ef7ac3c588d91a2f457fb90f4dc0cf9972b0eb8d9bdfa7d136f25df5",
+        "urls": [
+          "bzz-raw://5ea4732350035680324e30e0e3ab8af2452cc63ef7ab790a8eb36f6acbbda9f6",
+          "dweb:/ipfs/QmV1DfVg96UJJ5pk92wUBzdyosqTryxvZkq3uTJ2CztTVZ"
+        ],
+        "license": "MIT"
+      }
+    },
+    "version": 1
+  },
+  "ast": {
+    "absolutePath": "contracts/MerkleAirdrop.sol",
+    "id": 141,
+    "exportedSymbols": {
+      "Address": [
+        30440
+      ],
+      "AlreadyClaimed": [
+        9
+      ],
+      "BitMaps": [
+        32178
+      ],
+      "Context": [
+        30462
+      ],
+      "ERC165": [
+        31163
+      ],
+      "ERC721": [
+        29949
+      ],
+      "IERC165": [
+        31175
+      ],
+      "IERC20": [
+        28705
+      ],
+      "IERC721": [
+        30065
+      ],
+      "IERC721Metadata": [
+        30110
+      ],
+      "IERC721Receiver": [
+        30083
+      ],
+      "InvalidProof": [
+        11
+      ],
+      "Math": [
+        32040
+      ],
+      "MerkleAirdrop": [
+        140
+      ],
+      "MerkleProof": [
+        31139
+      ],
+      "MockNft": [
+        238
+      ],
+      "SafeERC20": [
+        29022
+      ],
+      "Strings": [
+        30637
+      ]
+    },
+    "nodeType": "SourceUnit",
+    "src": "32:2174:0",
+    "nodes": [
+      {
+        "id": 1,
+        "nodeType": "PragmaDirective",
+        "src": "32:24:0",
+        "nodes": [],
+        "literals": [
+          "solidity",
+          "^",
+          "0.8",
+          ".18"
+        ]
+      },
+      {
+        "id": 4,
+        "nodeType": "ImportDirective",
+        "src": "58:90:0",
+        "nodes": [],
+        "absolutePath": "node_modules/@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol",
+        "file": "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol",
+        "nameLocation": "-1:-1:-1",
+        "scope": 141,
+        "sourceUnit": 29023,
+        "symbolAliases": [
+          {
+            "foreign": {
+              "id": 2,
+              "name": "IERC20",
+              "nodeType": "Identifier",
+              "overloadedDeclarations": [],
+              "referencedDeclaration": 28705,
+              "src": "66:6:0",
+              "typeDescriptions": {}
+            },
+            "nameLocation": "-1:-1:-1"
+          },
+          {
+            "foreign": {
+              "id": 3,
+              "name": "SafeERC20",
+              "nodeType": "Identifier",
+              "overloadedDeclarations": [],
+              "referencedDeclaration": 29022,
+              "src": "74:9:0",
+              "typeDescriptions": {}
+            },
+            "nameLocation": "-1:-1:-1"
+          }
+        ],
+        "unitAlias": ""
+      },
+      {
+        "id": 5,
+        "nodeType": "ImportDirective",
+        "src": "149:59:0",
+        "nodes": [],
+        "absolutePath": "node_modules/@openzeppelin/contracts/utils/structs/BitMaps.sol",
+        "file": "@openzeppelin/contracts/utils/structs/BitMaps.sol",
+        "nameLocation": "-1:-1:-1",
+        "scope": 141,
+        "sourceUnit": 32179,
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "id": 6,
+        "nodeType": "ImportDirective",
+        "src": "209:68:0",
+        "nodes": [],
+        "absolutePath": "node_modules/@openzeppelin/contracts/utils/cryptography/MerkleProof.sol",
+        "file": "@openzeppelin/contracts/utils/cryptography/MerkleProof.sol",
+        "nameLocation": "-1:-1:-1",
+        "scope": 141,
+        "sourceUnit": 31140,
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "id": 7,
+        "nodeType": "ImportDirective",
+        "src": "278:29:0",
+        "nodes": [],
+        "absolutePath": "contracts/mocks/MockNft.sol",
+        "file": "./mocks/MockNft.sol",
+        "nameLocation": "-1:-1:-1",
+        "scope": 141,
+        "sourceUnit": 239,
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "id": 9,
+        "nodeType": "ErrorDefinition",
+        "src": "309:23:0",
+        "nodes": [],
+        "errorSelector": "646cf558",
+        "name": "AlreadyClaimed",
+        "nameLocation": "315:14:0",
+        "parameters": {
+          "id": 8,
+          "nodeType": "ParameterList",
+          "parameters": [],
+          "src": "329:2:0"
+        }
+      },
+      {
+        "id": 11,
+        "nodeType": "ErrorDefinition",
+        "src": "333:21:0",
+        "nodes": [],
+        "errorSelector": "09bde339",
+        "name": "InvalidProof",
+        "nameLocation": "339:12:0",
+        "parameters": {
+          "id": 10,
+          "nodeType": "ParameterList",
+          "parameters": [],
+          "src": "351:2:0"
+        }
+      },
+      {
+        "id": 140,
+        "nodeType": "ContractDefinition",
+        "src": "356:1849:0",
+        "nodes": [
+          {
+            "id": 15,
+            "nodeType": "UsingForDirective",
+            "src": "407:27:0",
+            "nodes": [],
+            "global": false,
+            "libraryName": {
+              "id": 12,
+              "name": "SafeERC20",
+              "nameLocations": [
+                "413:9:0"
+              ],
+              "nodeType": "IdentifierPath",
+              "referencedDeclaration": 29022,
+              "src": "413:9:0"
+            },
+            "typeName": {
+              "id": 14,
+              "nodeType": "UserDefinedTypeName",
+              "pathNode": {
+                "id": 13,
+                "name": "IERC20",
+                "nameLocations": [
+                  "427:6:0"
+                ],
+                "nodeType": "IdentifierPath",
+                "referencedDeclaration": 28705,
+                "src": "427:6:0"
+              },
+              "referencedDeclaration": 28705,
+              "src": "427:6:0",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_IERC20_$28705",
+                "typeString": "contract IERC20"
+              }
+            }
+          },
+          {
+            "id": 19,
+            "nodeType": "UsingForDirective",
+            "src": "439:33:0",
+            "nodes": [],
+            "global": false,
+            "libraryName": {
+              "id": 16,
+              "name": "BitMaps",
+              "nameLocations": [
+                "445:7:0"
+              ],
+              "nodeType": "IdentifierPath",
+              "referencedDeclaration": 32178,
+              "src": "445:7:0"
+            },
+            "typeName": {
+              "id": 18,
+              "nodeType": "UserDefinedTypeName",
+              "pathNode": {
+                "id": 17,
+                "name": "BitMaps.BitMap",
+                "nameLocations": [
+                  "457:7:0",
+                  "465:6:0"
+                ],
+                "nodeType": "IdentifierPath",
+                "referencedDeclaration": 32048,
+                "src": "457:14:0"
+              },
+              "referencedDeclaration": 32048,
+              "src": "457:14:0",
+              "typeDescriptions": {
+                "typeIdentifier": "t_struct$_BitMap_$32048_storage_ptr",
+                "typeString": "struct BitMaps.BitMap"
+              }
+            }
+          },
+          {
+            "id": 23,
+            "nodeType": "VariableDeclaration",
+            "src": "511:30:0",
+            "nodes": [],
+            "constant": false,
+            "documentation": {
+              "id": 20,
+              "nodeType": "StructuredDocumentation",
+              "src": "478:28:0",
+              "text": "GENERAL STORAGE VARS *"
+            },
+            "functionSelector": "fc0c546a",
+            "mutability": "immutable",
+            "name": "token",
+            "nameLocation": "536:5:0",
+            "scope": 140,
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_contract$_MockNft_$238",
+              "typeString": "contract MockNft"
+            },
+            "typeName": {
+              "id": 22,
+              "nodeType": "UserDefinedTypeName",
+              "pathNode": {
+                "id": 21,
+                "name": "MockNft",
+                "nameLocations": [
+                  "511:7:0"
+                ],
+                "nodeType": "IdentifierPath",
+                "referencedDeclaration": 238,
+                "src": "511:7:0"
+              },
+              "referencedDeclaration": 238,
+              "src": "511:7:0",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_MockNft_$238",
+                "typeString": "contract MockNft"
+              }
+            },
+            "visibility": "public"
+          },
+          {
+            "id": 25,
+            "nodeType": "VariableDeclaration",
+            "src": "547:35:0",
+            "nodes": [],
+            "constant": false,
+            "functionSelector": "2eb4a7ab",
+            "mutability": "immutable",
+            "name": "merkleRoot",
+            "nameLocation": "572:10:0",
+            "scope": 140,
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_bytes32",
+              "typeString": "bytes32"
+            },
+            "typeName": {
+              "id": 24,
+              "name": "bytes32",
+              "nodeType": "ElementaryTypeName",
+              "src": "547:7:0",
+              "typeDescriptions": {
+                "typeIdentifier": "t_bytes32",
+                "typeString": "bytes32"
+              }
+            },
+            "visibility": "public"
+          },
+          {
+            "id": 28,
+            "nodeType": "VariableDeclaration",
+            "src": "589:36:0",
+            "nodes": [],
+            "constant": false,
+            "mutability": "mutable",
+            "name": "claimedBitMap",
+            "nameLocation": "612:13:0",
+            "scope": 140,
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_struct$_BitMap_$32048_storage",
+              "typeString": "struct BitMaps.BitMap"
+            },
+            "typeName": {
+              "id": 27,
+              "nodeType": "UserDefinedTypeName",
+              "pathNode": {
+                "id": 26,
+                "name": "BitMaps.BitMap",
+                "nameLocations": [
+                  "589:7:0",
+                  "597:6:0"
+                ],
+                "nodeType": "IdentifierPath",
+                "referencedDeclaration": 32048,
+                "src": "589:14:0"
+              },
+              "referencedDeclaration": 32048,
+              "src": "589:14:0",
+              "typeDescriptions": {
+                "typeIdentifier": "t_struct$_BitMap_$32048_storage_ptr",
+                "typeString": "struct BitMaps.BitMap"
+              }
+            },
+            "visibility": "private"
+          },
+          {
+            "id": 35,
+            "nodeType": "EventDefinition",
+            "src": "651:51:0",
+            "nodes": [],
+            "anonymous": false,
+            "documentation": {
+              "id": 29,
+              "nodeType": "StructuredDocumentation",
+              "src": "632:14:0",
+              "text": "EVENTS *"
+            },
+            "eventSelector": "3fa7023c96f4790e8a40f2eb2147658bb04f0e46b300b15b82d302473bf79e15",
+            "name": "ClaimedNft",
+            "nameLocation": "657:10:0",
+            "parameters": {
+              "id": 34,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 31,
+                  "indexed": false,
+                  "mutability": "mutable",
+                  "name": "tokenId",
+                  "nameLocation": "676:7:0",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 35,
+                  "src": "668:15:0",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 30,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "668:7:0",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 33,
+                  "indexed": false,
+                  "mutability": "mutable",
+                  "name": "account",
+                  "nameLocation": "693:7:0",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 35,
+                  "src": "685:15:0",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 32,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "685:7:0",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "667:34:0"
+            }
+          },
+          {
+            "id": 53,
+            "nodeType": "FunctionDefinition",
+            "src": "732:114:0",
+            "nodes": [],
+            "body": {
+              "id": 52,
+              "nodeType": "Block",
+              "src": "781:65:0",
+              "nodes": [],
+              "statements": [
+                {
+                  "expression": {
+                    "id": 46,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "id": 44,
+                      "name": "token",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 23,
+                      "src": "791:5:0",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_contract$_MockNft_$238",
+                        "typeString": "contract MockNft"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "id": 45,
+                      "name": "token_",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 39,
+                      "src": "799:6:0",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_contract$_MockNft_$238",
+                        "typeString": "contract MockNft"
+                      }
+                    },
+                    "src": "791:14:0",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_contract$_MockNft_$238",
+                      "typeString": "contract MockNft"
+                    }
+                  },
+                  "id": 47,
+                  "nodeType": "ExpressionStatement",
+                  "src": "791:14:0"
+                },
+                {
+                  "expression": {
+                    "id": 50,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "id": 48,
+                      "name": "merkleRoot",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 25,
+                      "src": "815:10:0",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_bytes32",
+                        "typeString": "bytes32"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "id": 49,
+                      "name": "merkleRoot_",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 41,
+                      "src": "828:11:0",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_bytes32",
+                        "typeString": "bytes32"
+                      }
+                    },
+                    "src": "815:24:0",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bytes32",
+                      "typeString": "bytes32"
+                    }
+                  },
+                  "id": 51,
+                  "nodeType": "ExpressionStatement",
+                  "src": "815:24:0"
+                }
+              ]
+            },
+            "documentation": {
+              "id": 36,
+              "nodeType": "StructuredDocumentation",
+              "src": "708:19:0",
+              "text": "CONSTRUCTOR *"
+            },
+            "implemented": true,
+            "kind": "constructor",
+            "modifiers": [],
+            "name": "",
+            "nameLocation": "-1:-1:-1",
+            "parameters": {
+              "id": 42,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 39,
+                  "mutability": "mutable",
+                  "name": "token_",
+                  "nameLocation": "752:6:0",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 53,
+                  "src": "744:14:0",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_contract$_MockNft_$238",
+                    "typeString": "contract MockNft"
+                  },
+                  "typeName": {
+                    "id": 38,
+                    "nodeType": "UserDefinedTypeName",
+                    "pathNode": {
+                      "id": 37,
+                      "name": "MockNft",
+                      "nameLocations": [
+                        "744:7:0"
+                      ],
+                      "nodeType": "IdentifierPath",
+                      "referencedDeclaration": 238,
+                      "src": "744:7:0"
+                    },
+                    "referencedDeclaration": 238,
+                    "src": "744:7:0",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_contract$_MockNft_$238",
+                      "typeString": "contract MockNft"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 41,
+                  "mutability": "mutable",
+                  "name": "merkleRoot_",
+                  "nameLocation": "768:11:0",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 53,
+                  "src": "760:19:0",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bytes32",
+                    "typeString": "bytes32"
+                  },
+                  "typeName": {
+                    "id": 40,
+                    "name": "bytes32",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "760:7:0",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bytes32",
+                      "typeString": "bytes32"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "743:37:0"
+            },
+            "returnParameters": {
+              "id": 43,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "781:0:0"
+            },
+            "scope": 140,
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "public"
+          },
+          {
+            "id": 69,
+            "nodeType": "FunctionDefinition",
+            "src": "1038:124:0",
+            "nodes": [],
+            "body": {
+              "id": 68,
+              "nodeType": "Block",
+              "src": "1109:53:0",
+              "nodes": [],
+              "statements": [
+                {
+                  "expression": {
+                    "id": 66,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "id": 61,
+                      "name": "claimed",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 59,
+                      "src": "1119:7:0",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_bool",
+                        "typeString": "bool"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "arguments": [
+                        {
+                          "id": 64,
+                          "name": "tokenId",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 56,
+                          "src": "1147:7:0",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_uint256",
+                            "typeString": "uint256"
+                          }
+                        }
+                      ],
+                      "expression": {
+                        "argumentTypes": [
+                          {
+                            "typeIdentifier": "t_uint256",
+                            "typeString": "uint256"
+                          }
+                        ],
+                        "expression": {
+                          "id": 62,
+                          "name": "claimedBitMap",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 28,
+                          "src": "1129:13:0",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_struct$_BitMap_$32048_storage",
+                            "typeString": "struct BitMaps.BitMap storage ref"
+                          }
+                        },
+                        "id": 63,
+                        "isConstant": false,
+                        "isLValue": true,
+                        "isPure": false,
+                        "lValueRequested": false,
+                        "memberLocation": "1143:3:0",
+                        "memberName": "get",
+                        "nodeType": "MemberAccess",
+                        "referencedDeclaration": 32084,
+                        "src": "1129:17:0",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_function_internal_view$_t_struct$_BitMap_$32048_storage_ptr_$_t_uint256_$returns$_t_bool_$attached_to$_t_struct$_BitMap_$32048_storage_ptr_$",
+                          "typeString": "function (struct BitMaps.BitMap storage pointer,uint256) view returns (bool)"
+                        }
+                      },
+                      "id": 65,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "kind": "functionCall",
+                      "lValueRequested": false,
+                      "nameLocations": [],
+                      "names": [],
+                      "nodeType": "FunctionCall",
+                      "src": "1129:26:0",
+                      "tryCall": false,
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_bool",
+                        "typeString": "bool"
+                      }
+                    },
+                    "src": "1119:36:0",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "id": 67,
+                  "nodeType": "ExpressionStatement",
+                  "src": "1119:36:0"
+                }
+              ]
+            },
+            "documentation": {
+              "id": 54,
+              "nodeType": "StructuredDocumentation",
+              "src": "875:158:0",
+              "text": " @notice checks bitMap to see if token claimed\n @param tokenId the token being checked\n @return claimed bool if token is claimed"
+            },
+            "functionSelector": "9e34070f",
+            "implemented": true,
+            "kind": "function",
+            "modifiers": [],
+            "name": "isClaimed",
+            "nameLocation": "1047:9:0",
+            "parameters": {
+              "id": 57,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 56,
+                  "mutability": "mutable",
+                  "name": "tokenId",
+                  "nameLocation": "1065:7:0",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 69,
+                  "src": "1057:15:0",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 55,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1057:7:0",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1056:17:0"
+            },
+            "returnParameters": {
+              "id": 60,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 59,
+                  "mutability": "mutable",
+                  "name": "claimed",
+                  "nameLocation": "1100:7:0",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 69,
+                  "src": "1095:12:0",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bool",
+                    "typeString": "bool"
+                  },
+                  "typeName": {
+                    "id": 58,
+                    "name": "bool",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1095:4:0",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1094:14:0"
+            },
+            "scope": 140,
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "public"
+          },
+          {
+            "id": 82,
+            "nodeType": "FunctionDefinition",
+            "src": "1276:89:0",
+            "nodes": [],
+            "body": {
+              "id": 81,
+              "nodeType": "Block",
+              "src": "1322:43:0",
+              "nodes": [],
+              "statements": [
+                {
+                  "expression": {
+                    "arguments": [
+                      {
+                        "id": 78,
+                        "name": "tokenId",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 72,
+                        "src": "1350:7:0",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      ],
+                      "expression": {
+                        "id": 75,
+                        "name": "claimedBitMap",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 28,
+                        "src": "1332:13:0",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_struct$_BitMap_$32048_storage",
+                          "typeString": "struct BitMaps.BitMap storage ref"
+                        }
+                      },
+                      "id": 77,
+                      "isConstant": false,
+                      "isLValue": true,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "memberLocation": "1346:3:0",
+                      "memberName": "set",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 32143,
+                      "src": "1332:17:0",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_internal_nonpayable$_t_struct$_BitMap_$32048_storage_ptr_$_t_uint256_$returns$__$attached_to$_t_struct$_BitMap_$32048_storage_ptr_$",
+                        "typeString": "function (struct BitMaps.BitMap storage pointer,uint256)"
+                      }
+                    },
+                    "id": 79,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "nameLocations": [],
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "1332:26:0",
+                    "tryCall": false,
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$__$",
+                      "typeString": "tuple()"
+                    }
+                  },
+                  "id": 80,
+                  "nodeType": "ExpressionStatement",
+                  "src": "1332:26:0"
+                }
+              ]
+            },
+            "documentation": {
+              "id": 70,
+              "nodeType": "StructuredDocumentation",
+              "src": "1168:103:0",
+              "text": " @notice sets bitMap for a claimed token\n @param tokenId tokenId to set claimed"
+            },
+            "implemented": true,
+            "kind": "function",
+            "modifiers": [],
+            "name": "_setClaimed",
+            "nameLocation": "1285:11:0",
+            "parameters": {
+              "id": 73,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 72,
+                  "mutability": "mutable",
+                  "name": "tokenId",
+                  "nameLocation": "1305:7:0",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 82,
+                  "src": "1297:15:0",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 71,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1297:7:0",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1296:17:0"
+            },
+            "returnParameters": {
+              "id": 74,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "1322:0:0"
+            },
+            "scope": 140,
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "private"
+          },
+          {
+            "id": 139,
+            "nodeType": "FunctionDefinition",
+            "src": "1585:618:0",
+            "nodes": [],
+            "body": {
+              "id": 138,
+              "nodeType": "Block",
+              "src": "1713:490:0",
+              "nodes": [],
+              "statements": [
+                {
+                  "condition": {
+                    "arguments": [
+                      {
+                        "id": 94,
+                        "name": "tokenId",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 85,
+                        "src": "1737:7:0",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      ],
+                      "id": 93,
+                      "name": "isClaimed",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 69,
+                      "src": "1727:9:0",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_internal_view$_t_uint256_$returns$_t_bool_$",
+                        "typeString": "function (uint256) view returns (bool)"
+                      }
+                    },
+                    "id": 95,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "nameLocations": [],
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "1727:18:0",
+                    "tryCall": false,
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "id": 99,
+                  "nodeType": "IfStatement",
+                  "src": "1723:47:0",
+                  "trueBody": {
+                    "errorCall": {
+                      "arguments": [],
+                      "expression": {
+                        "argumentTypes": [],
+                        "id": 96,
+                        "name": "AlreadyClaimed",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 9,
+                        "src": "1754:14:0",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_function_error_pure$__$returns$__$",
+                          "typeString": "function () pure"
+                        }
+                      },
+                      "id": 97,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "kind": "functionCall",
+                      "lValueRequested": false,
+                      "nameLocations": [],
+                      "names": [],
+                      "nodeType": "FunctionCall",
+                      "src": "1754:16:0",
+                      "tryCall": false,
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_tuple$__$",
+                        "typeString": "tuple()"
+                      }
+                    },
+                    "id": 98,
+                    "nodeType": "RevertStatement",
+                    "src": "1747:23:0"
+                  }
+                },
+                {
+                  "assignments": [
+                    101
+                  ],
+                  "declarations": [
+                    {
+                      "constant": false,
+                      "id": 101,
+                      "mutability": "mutable",
+                      "name": "leaf",
+                      "nameLocation": "1825:4:0",
+                      "nodeType": "VariableDeclaration",
+                      "scope": 138,
+                      "src": "1817:12:0",
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_bytes32",
+                        "typeString": "bytes32"
+                      },
+                      "typeName": {
+                        "id": 100,
+                        "name": "bytes32",
+                        "nodeType": "ElementaryTypeName",
+                        "src": "1817:7:0",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_bytes32",
+                          "typeString": "bytes32"
+                        }
+                      },
+                      "visibility": "internal"
+                    }
+                  ],
+                  "id": 109,
+                  "initialValue": {
+                    "arguments": [
+                      {
+                        "arguments": [
+                          {
+                            "id": 105,
+                            "name": "tokenId",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 85,
+                            "src": "1859:7:0",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_uint256",
+                              "typeString": "uint256"
+                            }
+                          },
+                          {
+                            "id": 106,
+                            "name": "account",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 87,
+                            "src": "1868:7:0",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_address",
+                              "typeString": "address"
+                            }
+                          }
+                        ],
+                        "expression": {
+                          "argumentTypes": [
+                            {
+                              "typeIdentifier": "t_uint256",
+                              "typeString": "uint256"
+                            },
+                            {
+                              "typeIdentifier": "t_address",
+                              "typeString": "address"
+                            }
+                          ],
+                          "expression": {
+                            "id": 103,
+                            "name": "abi",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": -1,
+                            "src": "1842:3:0",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_magic_abi",
+                              "typeString": "abi"
+                            }
+                          },
+                          "id": 104,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": true,
+                          "lValueRequested": false,
+                          "memberLocation": "1846:12:0",
+                          "memberName": "encodePacked",
+                          "nodeType": "MemberAccess",
+                          "src": "1842:16:0",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_function_abiencodepacked_pure$__$returns$_t_bytes_memory_ptr_$",
+                            "typeString": "function () pure returns (bytes memory)"
+                          }
+                        },
+                        "id": 107,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": false,
+                        "kind": "functionCall",
+                        "lValueRequested": false,
+                        "nameLocations": [],
+                        "names": [],
+                        "nodeType": "FunctionCall",
+                        "src": "1842:34:0",
+                        "tryCall": false,
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_bytes_memory_ptr",
+                          "typeString": "bytes memory"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_bytes_memory_ptr",
+                          "typeString": "bytes memory"
+                        }
+                      ],
+                      "id": 102,
+                      "name": "keccak256",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": -8,
+                      "src": "1832:9:0",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_keccak256_pure$_t_bytes_memory_ptr_$returns$_t_bytes32_$",
+                        "typeString": "function (bytes memory) pure returns (bytes32)"
+                      }
+                    },
+                    "id": 108,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "nameLocations": [],
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "1832:45:0",
+                    "tryCall": false,
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bytes32",
+                      "typeString": "bytes32"
+                    }
+                  },
+                  "nodeType": "VariableDeclarationStatement",
+                  "src": "1817:60:0"
+                },
+                {
+                  "condition": {
+                    "id": 116,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "nodeType": "UnaryOperation",
+                    "operator": "!",
+                    "prefix": true,
+                    "src": "1891:50:0",
+                    "subExpression": {
+                      "arguments": [
+                        {
+                          "id": 112,
+                          "name": "merkleProof",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 90,
+                          "src": "1911:11:0",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_array$_t_bytes32_$dyn_calldata_ptr",
+                            "typeString": "bytes32[] calldata"
+                          }
+                        },
+                        {
+                          "id": 113,
+                          "name": "merkleRoot",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 25,
+                          "src": "1924:10:0",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_bytes32",
+                            "typeString": "bytes32"
+                          }
+                        },
+                        {
+                          "id": 114,
+                          "name": "leaf",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 101,
+                          "src": "1936:4:0",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_bytes32",
+                            "typeString": "bytes32"
+                          }
+                        }
+                      ],
+                      "expression": {
+                        "argumentTypes": [
+                          {
+                            "typeIdentifier": "t_array$_t_bytes32_$dyn_calldata_ptr",
+                            "typeString": "bytes32[] calldata"
+                          },
+                          {
+                            "typeIdentifier": "t_bytes32",
+                            "typeString": "bytes32"
+                          },
+                          {
+                            "typeIdentifier": "t_bytes32",
+                            "typeString": "bytes32"
+                          }
+                        ],
+                        "expression": {
+                          "id": 110,
+                          "name": "MerkleProof",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 31139,
+                          "src": "1892:11:0",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_type$_t_contract$_MerkleProof_$31139_$",
+                            "typeString": "type(library MerkleProof)"
+                          }
+                        },
+                        "id": 111,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": false,
+                        "lValueRequested": false,
+                        "memberLocation": "1904:6:0",
+                        "memberName": "verify",
+                        "nodeType": "MemberAccess",
+                        "referencedDeclaration": 30661,
+                        "src": "1892:18:0",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_function_internal_pure$_t_array$_t_bytes32_$dyn_memory_ptr_$_t_bytes32_$_t_bytes32_$returns$_t_bool_$",
+                          "typeString": "function (bytes32[] memory,bytes32,bytes32) pure returns (bool)"
+                        }
+                      },
+                      "id": 115,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "kind": "functionCall",
+                      "lValueRequested": false,
+                      "nameLocations": [],
+                      "names": [],
+                      "nodeType": "FunctionCall",
+                      "src": "1892:49:0",
+                      "tryCall": false,
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_bool",
+                        "typeString": "bool"
+                      }
+                    },
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "id": 120,
+                  "nodeType": "IfStatement",
+                  "src": "1887:77:0",
+                  "trueBody": {
+                    "errorCall": {
+                      "arguments": [],
+                      "expression": {
+                        "argumentTypes": [],
+                        "id": 117,
+                        "name": "InvalidProof",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 11,
+                        "src": "1950:12:0",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_function_error_pure$__$returns$__$",
+                          "typeString": "function () pure"
+                        }
+                      },
+                      "id": 118,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "kind": "functionCall",
+                      "lValueRequested": false,
+                      "nameLocations": [],
+                      "names": [],
+                      "nodeType": "FunctionCall",
+                      "src": "1950:14:0",
+                      "tryCall": false,
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_tuple$__$",
+                        "typeString": "tuple()"
+                      }
+                    },
+                    "id": 119,
+                    "nodeType": "RevertStatement",
+                    "src": "1943:21:0"
+                  }
+                },
+                {
+                  "expression": {
+                    "arguments": [
+                      {
+                        "id": 122,
+                        "name": "tokenId",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 85,
+                        "src": "2034:7:0",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      ],
+                      "id": 121,
+                      "name": "_setClaimed",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 82,
+                      "src": "2022:11:0",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_internal_nonpayable$_t_uint256_$returns$__$",
+                        "typeString": "function (uint256)"
+                      }
+                    },
+                    "id": 123,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "nameLocations": [],
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "2022:20:0",
+                    "tryCall": false,
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$__$",
+                      "typeString": "tuple()"
+                    }
+                  },
+                  "id": 124,
+                  "nodeType": "ExpressionStatement",
+                  "src": "2022:20:0"
+                },
+                {
+                  "expression": {
+                    "arguments": [
+                      {
+                        "id": 128,
+                        "name": "account",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 87,
+                        "src": "2122:7:0",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        }
+                      },
+                      {
+                        "id": 129,
+                        "name": "tokenId",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 85,
+                        "src": "2131:7:0",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      },
+                      {
+                        "id": 130,
+                        "name": "merkleProof",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 90,
+                        "src": "2140:11:0",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_array$_t_bytes32_$dyn_calldata_ptr",
+                          "typeString": "bytes32[] calldata"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        },
+                        {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        },
+                        {
+                          "typeIdentifier": "t_array$_t_bytes32_$dyn_calldata_ptr",
+                          "typeString": "bytes32[] calldata"
+                        }
+                      ],
+                      "expression": {
+                        "id": 125,
+                        "name": "token",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 23,
+                        "src": "2109:5:0",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_contract$_MockNft_$238",
+                          "typeString": "contract MockNft"
+                        }
+                      },
+                      "id": 127,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "memberLocation": "2115:6:0",
+                      "memberName": "redeem",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 195,
+                      "src": "2109:12:0",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_external_nonpayable$_t_address_$_t_uint256_$_t_array$_t_bytes32_$dyn_memory_ptr_$returns$__$",
+                        "typeString": "function (address,uint256,bytes32[] memory) external"
+                      }
+                    },
+                    "id": 131,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "nameLocations": [],
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "2109:43:0",
+                    "tryCall": false,
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$__$",
+                      "typeString": "tuple()"
+                    }
+                  },
+                  "id": 132,
+                  "nodeType": "ExpressionStatement",
+                  "src": "2109:43:0"
+                },
+                {
+                  "eventCall": {
+                    "arguments": [
+                      {
+                        "id": 134,
+                        "name": "tokenId",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 85,
+                        "src": "2179:7:0",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      },
+                      {
+                        "id": 135,
+                        "name": "account",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 87,
+                        "src": "2188:7:0",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        },
+                        {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        }
+                      ],
+                      "id": 133,
+                      "name": "ClaimedNft",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 35,
+                      "src": "2168:10:0",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_event_nonpayable$_t_uint256_$_t_address_$returns$__$",
+                        "typeString": "function (uint256,address)"
+                      }
+                    },
+                    "id": 136,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "nameLocations": [],
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "2168:28:0",
+                    "tryCall": false,
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$__$",
+                      "typeString": "tuple()"
+                    }
+                  },
+                  "id": 137,
+                  "nodeType": "EmitStatement",
+                  "src": "2163:33:0"
+                }
+              ]
+            },
+            "documentation": {
+              "id": 83,
+              "nodeType": "StructuredDocumentation",
+              "src": "1371:209:0",
+              "text": " @notice claims a token\n @param tokenId the token that is being claimed\n @param account the account claiming the token\n @param merkleProof  the proof used to claim the token"
+            },
+            "functionSelector": "f72d82cf",
+            "implemented": true,
+            "kind": "function",
+            "modifiers": [],
+            "name": "claim",
+            "nameLocation": "1594:5:0",
+            "parameters": {
+              "id": 91,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 85,
+                  "mutability": "mutable",
+                  "name": "tokenId",
+                  "nameLocation": "1617:7:0",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 139,
+                  "src": "1609:15:0",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 84,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1609:7:0",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 87,
+                  "mutability": "mutable",
+                  "name": "account",
+                  "nameLocation": "1642:7:0",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 139,
+                  "src": "1634:15:0",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 86,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1634:7:0",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 90,
+                  "mutability": "mutable",
+                  "name": "merkleProof",
+                  "nameLocation": "1678:11:0",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 139,
+                  "src": "1659:30:0",
+                  "stateVariable": false,
+                  "storageLocation": "calldata",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_array$_t_bytes32_$dyn_calldata_ptr",
+                    "typeString": "bytes32[]"
+                  },
+                  "typeName": {
+                    "baseType": {
+                      "id": 88,
+                      "name": "bytes32",
+                      "nodeType": "ElementaryTypeName",
+                      "src": "1659:7:0",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_bytes32",
+                        "typeString": "bytes32"
+                      }
+                    },
+                    "id": 89,
+                    "nodeType": "ArrayTypeName",
+                    "src": "1659:9:0",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_array$_t_bytes32_$dyn_storage_ptr",
+                      "typeString": "bytes32[]"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1599:96:0"
+            },
+            "returnParameters": {
+              "id": 92,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "1713:0:0"
+            },
+            "scope": 140,
+            "stateMutability": "nonpayable",
+            "virtual": true,
+            "visibility": "external"
+          }
+        ],
+        "abstract": false,
+        "baseContracts": [],
+        "canonicalName": "MerkleAirdrop",
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "fullyImplemented": true,
+        "linearizedBaseContracts": [
+          140
+        ],
+        "name": "MerkleAirdrop",
+        "nameLocation": "365:13:0",
+        "scope": 141,
+        "usedErrors": [
+          9,
+          11
+        ]
+      }
+    ],
+    "license": "MIT"
+  },
+  "id": 0
+}

@@ -42,6 +42,6 @@ contract MockNft is ERC721 {
         bytes32 _leafParam,
         bytes32[] memory _proof
     ) internal view returns (bool isVerified) {
-        isVerified = MerkleProof.verify(_proof, root, leafParam);
+        isVerified = MerkleProof.verify(_proof, root, _leafParam);
     }
 }

@@ -74,10 +74,23 @@ contract ClaimFungibleToken is Setup {
         merkleAirdrop.claimFungibleToken(vm.addr(1), 100, index, proof);
     }
 
-    function testShouldTransferTokenToClaimer() public {}
+    function testShouldTransferTokenToClaimer(uint8 index) public {
+        vm.assume(index > 0);
+
+        uint256 tokenBalanceBefore = token.balanceOf(vm.addr(1));
+        assertEq(tokenBalanceBefore, 0);
+
+        bytes32[] memory proof = m.getProof(merkleTreeElements, index);
+
+        merkleAirdrop.claimFungibleToken(vm.addr(1), 100, index, proof);
+
+        uint256 tokenBalanceAfter = token.balanceOf(vm.addr(1));
+        assertEq(tokenBalanceAfter, 100);
+    }
 
     function testShouldEmitTokenClaimedEvent() public {}
 
+    /** HELPER **/
     function _removeLastElement(bytes32[] memory arr) internal returns (bytes32[] memory) {
         require(arr.length > 0, 'Array must not be empty');
         bytes32[] memory newArr = new bytes32[](arr.length - 1);

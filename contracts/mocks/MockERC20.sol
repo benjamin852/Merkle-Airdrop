@@ -25,7 +25,7 @@ contract MockERC20 is ERC20 {
         bytes32[] calldata proof
     ) external {
         require(_verify(_leaf(_index, _account, _amount), proof), 'Invalid merkle proof');
-        _mint(msg.sender, _amount);
+        _mint(_account, _amount);
     }
 
     /**

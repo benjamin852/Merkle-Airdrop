@@ -3,7 +3,6 @@ pragma solidity ^0.8.18;
 
 import '@openzeppelin/contracts/utils/structs/BitMaps.sol';
 import '@openzeppelin/contracts/utils/cryptography/MerkleProof.sol';
-// import '@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol';
 import '../contracts/mocks/MockERC20.sol';
 
 // /** ERRORS **/
@@ -12,7 +11,6 @@ error InvalidProof();
 
 contract FungibleMerkleAirdrop {
     /** LIBRARIES **/
-    // using SafeERC20 for IERC20;
     using BitMaps for BitMaps.BitMap;
 
     /** STORAGE **/

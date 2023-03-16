@@ -39,14 +39,6 @@ contract NFTMerkleAirdrop {
     }
 
     /**
-     * @notice sets bitMap for a claimed token
-     * @param _tokenId _tokenId to set claimed
-     */
-    function _setClaimed(uint256 _tokenId) private {
-        claimedBitMap.set(_tokenId);
-    }
-
-    /**
      * @notice claims a token
      * @param _tokenId the token that is being claimed
      * @param _account the account claiming the token
@@ -65,5 +57,15 @@ contract NFTMerkleAirdrop {
         token.redeem(_account, _tokenId, _merkleProof);
 
         emit ClaimedNft(_tokenId, _account);
+    }
+
+    /** HELPER FUNCTIONS **/
+
+    /**
+     * @notice sets bitMap for a claimed token
+     * @param _tokenId _tokenId to set claimed
+     */
+    function _setClaimed(uint256 _tokenId) private {
+        claimedBitMap.set(_tokenId);
     }
 }

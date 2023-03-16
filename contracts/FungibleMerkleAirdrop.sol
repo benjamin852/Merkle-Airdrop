@@ -40,6 +40,14 @@ contract FungibleMerkleAirdrop {
     }
 
     /**
+     * @notice set the token status to claimed in the merkle tree
+     * @param _index the token index in the bitmap being claimed
+     */
+    function setClaimed(uint256 _index) public {
+        claimedBitMap.set(_index);
+    }
+
+    /**
      * @notice claim erc20 token
      * @param _claimer the redeeming address claiming the token
      * @param _amount the amount of tokens being claimed
@@ -56,7 +64,7 @@ contract FungibleMerkleAirdrop {
         if (isClaimed(_index)) revert AlreadyClaimed();
 
         //claim token
-        _setClaimed(_index);
+        setClaimed(_index);
 
         //verify merkle proof
         bytes32 leaf = keccak256(abi.encodePacked(_index, _claimer, _amount));
@@ -66,14 +74,5 @@ contract FungibleMerkleAirdrop {
         token.redeem(_claimer, _amount, _merkleProof);
 
         emit TokenClaimed(_claimer, _amount);
-    }
-
-    /** HELPER FUNCTIONS **/
-    /**
-     * @notice set the token status to claimed in the merkle tree
-     * @param _index the token index in the bitmap being claimed
-     */
-    function _setClaimed(uint256 _index) private {
-        claimedBitMap.set(_index);
     }
 }

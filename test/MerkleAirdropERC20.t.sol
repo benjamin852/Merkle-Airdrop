@@ -28,6 +28,8 @@ contract Claimed is Setup {
 }
 
 contract ClaimFungibleToken is Setup {
+    event TokenClaimed(address claimer, uint256 tokenAmount);
+
     function testFuzz_ShouldRevertIfClaimedTwice(uint8 index) public {
         vm.assume(index > 0);
         merkleAirdrop.setClaimed(index);
@@ -88,7 +90,15 @@ contract ClaimFungibleToken is Setup {
         assertEq(tokenBalanceAfter, 100);
     }
 
-    function testShouldEmitTokenClaimedEvent() public {}
+    function testShouldEmitTokenClaimedEvent(uint8 index) public {
+        vm.assume(index > 0);
+
+        bytes32[] memory proof = m.getProof(merkleTreeElements, index);
+
+        vm.expectEmit(false, false, false, false);
+        emit TokenClaimed(vm.addr(1), 100);
+        merkleAirdrop.claimFungibleToken(vm.addr(1), 100, index, proof);
+    }
 
     /** HELPER **/
     function _removeLastElement(bytes32[] memory arr) internal returns (bytes32[] memory) {

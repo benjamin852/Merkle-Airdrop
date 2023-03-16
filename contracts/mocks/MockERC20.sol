@@ -13,23 +13,34 @@ contract MockERC20 is ERC20 {
 
     /**
      * @notice redeem the token for the airdrop recipient
+     * @param _index the index of the token
      * @param _account the account redeeming the token
      * @param _amount the amount of tokens being redeemed
      * @param proof the proof for the leaf existing in the merkle tree
      */
-    function redeem(address _account, uint256 _amount, bytes32[] calldata proof) external {
-        require(_verify(_leaf(_account, _amount), proof), 'Invalid merkle proof');
+    function redeem(
+        uint256 _index,
+        address _account,
+        uint256 _amount,
+        bytes32[] calldata proof
+    ) external {
+        require(_verify(_leaf(_index, _account, _amount), proof), 'Invalid merkle proof');
         _mint(msg.sender, _amount);
     }
 
     /**
      * @notice the leaf in the tree containing the token&recipient receiving the airdrop
+     * @param _index the index of the token
      * @param _account the account contained in the leaf
      * @param _amount the amount of tokens in the leaf
      * @return leaf the hashed leaf
      */
-    function _leaf(address _account, uint256 _amount) internal pure returns (bytes32 leaf) {
-        leaf = keccak256(abi.encode(_account, _amount));
+    function _leaf(
+        uint256 _index,
+        address _account,
+        uint256 _amount
+    ) internal pure returns (bytes32 leaf) {
+        leaf = keccak256(abi.encodePacked(_index, _account, _amount));
     }
 
     /**

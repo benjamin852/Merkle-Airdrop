@@ -28,11 +28,11 @@ contract Claimed is Setup {
 }
 
 contract ClaimFungibleToken is Setup {
-    function testFuzz_ShouldRevertIfClaimedTwice() public {
-        // vm.assume(index > 0);
+    function testFuzz_ShouldRevertIfClaimedTwice(uint8 index) public {
+        vm.assume(index > 0);
         // merkleAirdrop.setClaimed(11);
-        bytes32 leafData = _hashDataForLeaf(11, vm.addr(1), 100);
-        bytes32[] memory proof = m.getProof(merkleTreeElements, 11);
+        bytes32 leafData = _hashDataForLeaf(index, vm.addr(1), 100);
+        bytes32[] memory proof = m.getProof(merkleTreeElements, index);
 
         bool testMe = m.verifyProof(merkleRoot, proof, leafData);
         assertTrue(testMe);

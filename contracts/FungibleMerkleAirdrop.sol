@@ -71,7 +71,7 @@ contract FungibleMerkleAirdrop {
         if (!MerkleProof.verify(_merkleProof, merkleRoot, leaf)) revert InvalidProof();
 
         //mint my rewards
-        token.redeem(_claimer, _amount, _merkleProof);
+        // token.redeem(_claimer, _amount, _merkleProof);
 
         emit TokenClaimed(_claimer, _amount);
     }

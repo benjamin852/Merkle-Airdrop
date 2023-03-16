@@ -28,23 +28,33 @@ contract Claimed is Setup {
 }
 
 contract ClaimFungibleToken is Setup {
-    error AlreadyClaimed();
-    error InvalidProof();
-
     function testFuzz_ShouldRevertIfClaimedTwice(uint8 index) public {
         vm.assume(index > 0);
-        merkleAirdrop.setClaimed(11);
-        // bytes32 leafData = _hashDataForLeaf(index, vm.addr(1), 100);
+        merkleAirdrop.setClaimed(index);
+
         bytes32[] memory proof = m.getProof(merkleTreeElements, index);
 
-        // bool testMe = m.verifyProof(merkleRoot, proof, leafData);
-        // assertTrue(testMe);
-
         vm.expectRevert(AlreadyClaimed.selector);
-        merkleAirdrop.claimFungibleToken(vm.addr(1), 100, 11, proof);
+        merkleAirdrop.claimFungibleToken(vm.addr(1), 100, index, proof);
     }
 
-    function testShouldSetClaimed() public {}
+    function testFuzz_ShouldSetClaimed(uint8 index) public {
+        vm.assume(index > 0);
+
+        bool checkClaimed = merkleAirdrop.isClaimed(index);
+        assertFalse(checkClaimed);
+
+        bytes32[] memory proof = m.getProof(merkleTreeElements, index);
+
+        bytes32 leafData = _hashDataForLeaf(index, vm.addr(1), 100);
+
+        bool proofIsVerified = m.verifyProof(merkleRoot, proof, leafData);
+        assertTrue(proofIsVerified);
+
+        merkleAirdrop.claimFungibleToken(vm.addr(1), 100, index, proof);
+        bool checkClaimedAfter = merkleAirdrop.isClaimed(index);
+        assertTrue(checkClaimedAfter);
+    }
 
     function testShouldRevertIfInvalidProof() public {}
 

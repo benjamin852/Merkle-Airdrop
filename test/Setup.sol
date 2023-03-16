@@ -10,7 +10,7 @@ import '../contracts/FungibleMerkleAirdrop.sol';
 contract Setup is Test, Merkle {
     MockERC20 public token;
 
-    uint256 NUM_LEAVES = 300;
+    uint256 NUM_LEAVES = 500;
 
     bytes32[] public merkleTreeElements;
     bytes32 public merkleRoot;
